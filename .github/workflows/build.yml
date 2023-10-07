@@ -18,6 +18,9 @@ jobs:
       with:
         node-version: '18'
         
+    - name: Show GitHub Actor
+      run: echo $GITHUB_ACTOR
+
     - name: Install npm dependencies
       run: npm install
 
@@ -27,8 +30,8 @@ jobs:
     - name: Install PM2
       run: npm install pm2 -g
 
-    - name: Start React beck with PM2
-      run: pm2 start npm --name "app-name" -- start -- --port 3000
+    - name: Start React app with PM2
+      run: pm2 start npm --name "online-chat-client" -- start -- --port 8080
       env:
         PM2_PUBLIC: true # Дозволяємо PM2 служити додаток на відкритому порті
 
