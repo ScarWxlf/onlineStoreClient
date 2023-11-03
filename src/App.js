@@ -1,11 +1,18 @@
 import './App.css';
-import Header from './components/Header';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Profile from "./pages/profile";
+import Home from "./pages/home";
+import LoginPage from "./pages/log-in";
 
 function App() {
   return (
-    <div className="App">
-      <Header/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="login" element={<LoginPage/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
