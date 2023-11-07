@@ -1,47 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 function Login() {
+    const [data, setData] = useState({
+      username: "",
+      password: ""
+    });
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setData({
+      ...data,
+      [e.target.name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = {
+      username: data.username,
+      password: data.password
+    };
+    axios.post("http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register", userData).then((response) => {
+      console.log(response);
+    });
+  };
+
   return (
-    <div className="d-flex align-items-center py-4 bg-body-tertiary mt-5">
-      <div className="form-signin w-40 m-auto vh100">
-        <form>
-          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-
-          <div className="form-floating">
-            <input
-              type="email"
-              className="form-control"
-              id="floatingInput"
-              placeholder="name@example.com"
-            />
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div className="form-floating">
-            <input
-              type="password"
-              className="form-control"
-              id="floatingPassword"
-              placeholder="Password"
-            />
-            <label for="floatingPassword">Password</label>
-          </div>
-
-          <div className="form-check text-start my-3">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value="remember-me"
-              id="flexCheckDefault"
-            />
-            <label className="form-check-label" for="flexCheckDefault">
-              Remember me
-            </label>
-          </div>
-          <button className="btn btn-primary w-100 py-2" type="submit">
-            Sign in
-          </button>
-        </form>
-      </div>
+    <div className="mt-5">
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">
+          Username
+          <input
+            type="username"
+            name="username"
+            value={data.username}
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="password">
+          Password
+          <input
+            type="password"
+            name="password"
+            value={data.password}
+            onChange={handleChange}
+          />
+        </label>
+        <button type="submit">Register</button>
+      </form>
     </div>
   );
 }
