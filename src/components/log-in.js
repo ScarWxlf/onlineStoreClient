@@ -21,7 +21,7 @@ function Login() {
       username: data.username,
       password: data.password
     };
-    axios.post("http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register", userData).then((response) => {
+    axios.post("/api/register", userData).then((response) => {
       console.log(response);
     });
   };
