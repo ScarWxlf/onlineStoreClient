@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Auth } from "./isauth";
-import {useNavigate} from "react-router-dom";
+//import { Auth } from "./isauth";
+//import {useNavigate} from "react-router-dom";
 
 function SignUp() {
 
@@ -9,7 +9,7 @@ function SignUp() {
     baseURL: 'http://localhost:3001/'
 })
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
