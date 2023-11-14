@@ -4,6 +4,11 @@ import { Auth } from "./isauth";
 import {useNavigate} from "react-router-dom";
 
 function SignUp() {
+
+  const api = axios.create({
+    baseURL: 'http://localhost:3001/'
+})
+
   const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
@@ -18,7 +23,7 @@ function SignUp() {
     });
   };
 
-  console.log(Auth())
+  //console.log(Auth())
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +32,7 @@ function SignUp() {
       password: data.password,
     };
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register or /api/register
-    axios
+    api
       .post(
         "/api/register",
         userData,
@@ -35,7 +40,7 @@ function SignUp() {
       )
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        //navigate("/");
       });
   };
 
