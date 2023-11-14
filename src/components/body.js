@@ -1,6 +1,6 @@
 import React from "react"; 
 import "./style.css"
-import { Auth } from "./isauth";
+//import { Auth } from "./isauth";
 
 function Body(){
     //console.log(Auth());
