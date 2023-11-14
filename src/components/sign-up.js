@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
-function Login() {
+function SignUp() {
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -15,6 +16,8 @@ function Login() {
     });
   };
 
+  let cookieValue;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -24,11 +27,14 @@ function Login() {
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register or /api/register
     axios
       .post(
-        "http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register",
-        userData
+        "/api/register",
+        userData,
+        { withCredentials: true }
       )
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
+        cookieValue = Cookies.get("connect.sid");
+        console.log(cookieValue);
       });
   };
 
@@ -84,4 +90,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;

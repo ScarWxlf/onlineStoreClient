@@ -2,7 +2,8 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
-import LoginPage from "./pages/log-in";
+import SignUpPage from "./pages/sign-up";
+import SignInPage from "./pages/sign-in";
 import NavbarDefault from "./components/navbar";
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
         <Route path="/" element={<NavbarDefault />}>
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="login" element={<LoginPage />} />
+          <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="sign-in" element={<SignInPage/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
