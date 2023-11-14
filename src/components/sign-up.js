@@ -6,7 +6,7 @@ import axios from "axios";
 function SignUp() {
 
   const api = axios.create({
-    baseURL: 'http://localhost:3001/'
+    baseURL: '/'
 })
 
   //const navigate = useNavigate();
@@ -34,7 +34,7 @@ function SignUp() {
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register or /api/register
     api
       .post(
-        "/api/register",
+        "api/register",
         userData,
         { withCredentials: true }
       )
