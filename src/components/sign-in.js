@@ -76,7 +76,7 @@ function SignIn() {
             className="border border-gray-500 rounded-lg px-1 pb-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
             type="submit"
           >
-            Register
+            Login
           </button>
         </form>
       </div>

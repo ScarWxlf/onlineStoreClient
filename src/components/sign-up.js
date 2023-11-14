@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { Auth } from "./isauth";
+import {useNavigate} from "react-router-dom";
 
 function SignUp() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -16,7 +18,7 @@ function SignUp() {
     });
   };
 
-  let cookieValue;
+  console.log(Auth())
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,8 +35,7 @@ function SignUp() {
       )
       .then((response) => {
         console.log(response.data);
-        cookieValue = Cookies.get("connect.sid");
-        console.log(cookieValue);
+        navigate("/");
       });
   };
 
