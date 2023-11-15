@@ -7,6 +7,7 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Outlet } from "react-router-dom";
+import { LogOut } from "./log-out";
 
 export default function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
@@ -63,6 +64,16 @@ export default function NavbarDefault() {
         <a href="/" className="flex items-center">
           Basket
         </a>
+      </Typography>
+      <Typography>
+      <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+                onClick={LogOut()}
+              >
+                <span>Log out</span>
+              </Button>
       </Typography>
     </ul>
   );
