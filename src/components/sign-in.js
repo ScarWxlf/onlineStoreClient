@@ -33,7 +33,7 @@ function SignIn() {
   };
 
   return (
-    <div className="flex items-center mt-10 justify-center">
+    <div className="flex items-center mt-14 justify-center mb-56">
       <div className="container items-center flex flex-col">
         <form
           className="flex flex-col justify-center items-center gap-8 p-8 border-black border-2 rounded-md border-opacity-20"
