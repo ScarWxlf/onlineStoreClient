@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   MobileNav,
@@ -7,10 +7,11 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Outlet } from "react-router-dom";
-import { LogOut } from "./log-out";
+//import { LogOut } from "./log-out";
 
 export default function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
+  const [auth, setAuth] = useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -66,14 +67,9 @@ export default function NavbarDefault() {
         </a>
       </Typography>
       <Typography>
-      <Button
-                variant="text"
-                size="sm"
-                className="hidden lg:inline-block"
-                onClick={LogOut()}
-              >
-                <span>Log out</span>
-              </Button>
+        <Button onClick={() => setAuth(!auth)}>
+          <span>Spaw rigth buttons</span>
+        </Button>
       </Typography>
     </ul>
   );
@@ -91,6 +87,20 @@ export default function NavbarDefault() {
           </Typography>
           <div className="hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">
+          {auth ? (
+            <Button>
+              <span>Profile</span>
+            </Button>
+          ):(
+            <>
+          <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+                //onClick={LogOut()}
+              >
+                <span>Log out</span>
+              </Button>
             <a href="/sign-up">
               <Button
                 variant="text"
@@ -109,6 +119,8 @@ export default function NavbarDefault() {
                 <span>Sign in</span>
               </Button>
             </a>
+            </>
+          )}
           </div>
           <IconButton
             variant="text"
@@ -152,6 +164,14 @@ export default function NavbarDefault() {
           <div className="container mx-auto">
             {navList}
             <div className="flex items-center gap-x-1">
+            <Button
+                variant="text"
+                size="sm"
+                className=""
+                //onClick={LogOut()}
+              >
+                <span>Log out</span>
+              </Button>
               <a href="/sign-up">
                 <Button fullWidth variant="text" size="sm" className="">
                   <span>Sign up</span>
