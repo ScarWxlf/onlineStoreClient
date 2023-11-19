@@ -4,9 +4,7 @@ import ProfileElem from "../components/profileElem";
 
 function Profile() {
   return (
-    <div>
       <ProfileElem/>
-    </div>
   );
 }
 

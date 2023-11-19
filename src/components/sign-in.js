@@ -33,8 +33,8 @@ function SignIn() {
   };
 
   return (
-    <div className="flex items-center mt-14 justify-center mb-56">
-      <div className="container items-center flex flex-col">
+    <div className="flex flex-grow items-center justify-center">
+      <div className="container items-center flex flex-col mb-32">
         <form
           className="flex flex-col justify-center items-center gap-8 p-8 border-black border-2 rounded-md border-opacity-20"
           onSubmit={handleSubmit}
@@ -73,7 +73,7 @@ function SignIn() {
             </label>
           </div>
           <button
-            className="border border-gray-500 rounded-lg px-1 pb-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
+            className="border px-5 border-gray-500 rounded-lg py-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
             type="submit"
           >
             Login

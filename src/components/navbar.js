@@ -66,8 +66,10 @@ export default function NavbarDefault() {
           Basket
         </a>
       </Typography>
-      <Typography>
-        <Button onClick={() => setAuth(!auth)}>
+      <Typography
+        as="li"
+      >
+        <Button onClick={() => setAuth(!auth)}> 
           <span>Spaw rigth buttons</span>
         </Button>
       </Typography>
@@ -94,7 +96,7 @@ export default function NavbarDefault() {
           ):(
             <>
           <Button
-                variant="text"
+                variant="gradient"
                 size="sm"
                 className="hidden lg:inline-block"
                 //onClick={LogOut()}
@@ -103,7 +105,7 @@ export default function NavbarDefault() {
               </Button>
             <a href="/sign-up">
               <Button
-                variant="text"
+                variant="gradient"
                 size="sm"
                 className="hidden lg:inline-block"
               >
