@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
@@ -6,10 +7,12 @@ import SignUpPage from "./pages/sign-up";
 import SignInPage from "./pages/sign-in";
 import NavbarDefault from "./components/navbar";
 import Footer from "./components/footer";
+import DetailsPage from "./components/detailsPage";
 
 function App() {
   return (
     <BrowserRouter>
+    <div className="flex flex-col h-screen">
       <Routes>
         <Route
           path="/"
@@ -23,9 +26,11 @@ function App() {
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
           <Route path="sign-up" element={<SignUpPage />} />
-          <Route path="sign-in" element={<SignInPage />}></Route>
+          <Route path="sign-in" element={<SignInPage />}/>
+          <Route path=":id/details" element={<DetailsPage />} />
         </Route>
       </Routes>
+    </div>
     </BrowserRouter>
   );
 }
