@@ -1,58 +1,86 @@
 import React from "react";
 import data from "../db/data";
 
+function Checkeds() {
+  const checkeds = document.querySelectorAll(".filter");
+  let checked = [];
+  for (let i = 0; i < checkeds.length; i++) {
+    if (checkeds[i].checked) {
+      checked.push(checkeds[i].parentElement.innerText);
+    }
+  }
+  return checked;
+} 
+ 
+export function updateCheckeds() {
+  return Checkeds();
+}
+ 
 function Filter() {
   function allFilters() {
     const categories = {};
-    for (let item of data) {
+    for (let item of data) { 
       for (let i in item.params) {
         let value = item.params[i];
-        if (categories[i] === undefined) {
+        if (categories[i] === undefined) { 
           categories[i] = new Set();
         }
         categories[i].add(value);
       }
     }
-    return categories;
+    return categories;  
   }
   const categories = allFilters();
-  console.log(categories);
 
-  return (
+  return ( 
     <div className="grid grid-cols-1 gap-7 justify-center items-start mt-3">
       {Object.keys(categories).map((category) => {
         if (Array.from(categories[category]).length > 5) {
           return (
-            <div>
-              <div className="flex justify-center">
-                <h1 className="text-2xl capitalize">{category}</h1>
-              </div>
-              <div className="grid grid-cols-2 gap-1">
-                {Array.from(categories[category]).map((value) => {
-                  return (
-                    <label>
-                      <input className="me-1" type="checkbox" name="" />
-                      {value}
-                    </label>
-                  );
-                })}
+            <div className="bg-gray-800 rounded-lg p-2">
+              <div className="bg-gray-900 rounded-sm">
+                <div className="flex justify-center">
+                  <h1 className="text-2xl capitalize">{category}</h1>
+                </div>
+                <div className="grid grid-cols-2 gap-1 rounded-lg p-2">
+                  {Array.from(categories[category]).map((value) => {
+                    return (
+                      <label>
+                        <input
+                          className={`filter me-1`}
+                          type="checkbox"
+                          name=""
+                          onChange={() => updateCheckeds()}
+                        />
+                        {value}
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );
         } else {
           return (
-            <div className="flex flex-col gap-1">
+            <div className="bg-gray-800 rounded-lg p-2">
+            <div className="flex flex-col items-center pb-2 gap-1 bg-gray-900 rounded-lg">
               <div className="flex justify-center">
                 <h1 className="text-2xl capitalize">{category}</h1>
               </div>
               {Array.from(categories[category]).map((value) => {
                 return (
                   <label>
-                    <input className="me-1" type="checkbox" name="" />
+                    <input
+                      className="filter me-1"
+                      type="checkbox"
+                      name=""
+                      onChange={() => updateCheckeds()}
+                    />
                     {value}
                   </label>
                 );
               })}
+            </div>
             </div>
           );
         }
