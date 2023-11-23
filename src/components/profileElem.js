@@ -7,7 +7,7 @@ function ProfileElem() {
       {/* <div className="bg-gray-400 flex justify-center items-center h-20 ">
         Something
       </div> */}
-      <div className="container flex flex-wrap flex-col text-gray-200 gap-3 items-center mt-12  mx-2">
+      <div className="container flex flex-wrap flex-col text-gray-200 gap-3 items-center mt-8  mx-2">
         <img
           src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
           class="w-32 rounded-full shadow-lg"
@@ -25,6 +25,15 @@ function ProfileElem() {
               <input className="px-1 rounded-lg text-black" type="text" />
               <input className="px-1 rounded-lg text-black" type="text" />
               <input className="px-1 rounded-lg text-black" type="text" />
+            </div>
+          </div>
+          <div>
+            <p className="ms-2 mb-1">Input new image (JPG, PNG)</p>
+            <div className="bg-gray-700 p-1 rounded-lg">
+              <input
+                type="file"
+                className="text-sm rounded-lg text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700"
+              />
             </div>
           </div>
           <button
