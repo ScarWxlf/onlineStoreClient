@@ -8,14 +8,29 @@ import Filter, { updateCheckeds } from "./filter";
 
 function Body() {
   //console.log(Auth());
-
+  
   const checked = updateCheckeds();
   const [items, setItems] = useState([]);
+
+  const [search, setSearch] = useState("");
+
+  const searchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
   useEffect(() => {
     let allItems = [];
     if (checked.length === 0) {
-      for (let i = 0; i < 20; i++) {
-        allItems.push(<Item id={data[i].id} />);
+      if (search.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].title.toLowerCase().includes(search.toLowerCase())) {
+            allItems.push(<Item id={data[i].id} />);
+          }
+        }
+      } else {
+        for (let i = 0; i < 20; i++) {
+          allItems.push(<Item id={data[i].id} />);
+        }
       }
     } else {
       let ids = new Set();
@@ -29,16 +44,26 @@ function Body() {
         }
       }
       ids.forEach((id) => {
-        allItems.push(<Item id={id} />);
+        if (search.length > 0) {
+          if (data[id - 1].title.toLowerCase().includes(search.toLowerCase())) {
+            allItems.push(<Item id={id} />);
+          }
+        } else {
+          allItems.push(<Item id={id} />);
+        }
       });
     }
     setItems(allItems);
-  }, [checked, items]);
+  }, [checked, search]);
 
   return (
     <div className="bg-gray-950 text-white flex-grow">
       <div className="bg-gray-800 flex justify-start items-center h-10 text-black">
-        <input placeholder="Search" className="ms-10 px-1 rounded-lg" />
+        <input
+          placeholder="Search"
+          className="search ms-10 px-1 rounded-lg"
+          onChange={searchChange}
+        />
       </div>
       <div className="flex h-full">
         <div className="bg-gray-900 container flex justify-center items-start w-60 h-full">
