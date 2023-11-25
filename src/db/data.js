@@ -6,7 +6,7 @@ const data = [
     star: 4.5,
     price: 19.99,
     params: {
-      color: "Red",
+      color: ["Red", "Blue", "Green"],
       category: "Category 1",
       geef: "geef",
       dasda: "dasda",

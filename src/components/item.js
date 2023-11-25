@@ -10,8 +10,8 @@ import data from "../db/data";
 
 function Item({id}) {
   return (
-    <Card className="w-70 my-2 outline outline-1 rounded-lg">
-      <CardHeader shadow={false} floated={false} className="h-60 m-0">
+    <Card className="!bg-gray-950 w-70 my-2 outline outline-1 rounded-xl">
+      <CardHeader shadow={false} floated={false} className=" !bg-gray-950 h-60 m-0">
         <img
           src={data[id-1].img}
           alt="Product"

@@ -25,7 +25,13 @@ function Filter() {
         if (categories[i] === undefined) {
           categories[i] = new Set();
         }
-        categories[i].add(value);
+        if (typeof value === "object") {
+          for (let j = 0; j < value.length; j++) {
+            categories[i].add(value[j]);
+          }
+        } else {
+          categories[i].add(value);
+        }
       }
     }
     return categories;

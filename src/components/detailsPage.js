@@ -6,6 +6,45 @@ import data from "../db/data";
 function DetailsPage() {
   const [rated, setRated] = React.useState(4);
   let { id } = useParams();
+  const [color] = React.useState(data[id - 1].params.color);
+  let colorButtons = [];
+  const allColors = {
+    red: "bg-red-500",
+    yellow: "bg-yellow-500",
+    green: "bg-green-500",
+    blue: "bg-blue-500",
+    indigo: "bg-indigo-500",
+    purple: "bg-purple-500",
+    pink: "bg-pink-500",
+    gray: "bg-gray-500",
+    white: "bg-white",
+    black: "bg-black",
+    rose: "bg-rose-500",
+    violet: "bg-violet-500",
+    orange: "bg-orange-500",
+    brown: "bg-orange-900",
+  };
+
+  if (typeof color === "string") {
+    colorButtons.push(
+      <button
+        className={`w-6 h-6 rounded-full border border-black ${
+          allColors[color.toLowerCase()]
+        } mr-2`}
+      ></button>
+    );
+  } else {
+    for (let i = 0; i < color.length; i++) {
+      colorButtons.push(
+        <button
+          className={`w-6 h-6 rounded-full border border-black ${
+            allColors[color[i].toLowerCase()]
+          } mr-2`}
+        ></button>
+      );
+    }
+  }
+  //console.log(colorButtons);
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-grow">
@@ -78,12 +117,7 @@ function DetailsPage() {
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Select Color:
               </span>
-              <div className="flex items-center mt-2">
-                <button className="w-6 h-6 rounded-full bg-gray-800 dark:bg-gray-200 mr-2"></button>
-                <button className="w-6 h-6 rounded-full bg-red-500 dark:bg-red-700 mr-2"></button>
-                <button className="w-6 h-6 rounded-full bg-blue-500 dark:bg-blue-700 mr-2"></button>
-                <button className="w-6 h-6 rounded-full bg-yellow-500 dark:bg-yellow-700 mr-2"></button>
-              </div>
+              <div className="flex items-center mt-2">{colorButtons}</div>
             </div>
             <div className="mb-4">
               <span className="font-bold text-gray-700 dark:text-gray-300">

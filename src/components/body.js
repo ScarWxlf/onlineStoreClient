@@ -4,7 +4,7 @@ import Item from "./item";
 import Pagination from "./pages";
 import data from "../db/data";
 import Filter, { updateCheckeds } from "./filter";
-import coolImage from "../images/c41a0b93-4561-4fe2-93ee-62493bc9807a.jpg"
+import coolImage from "../images/c41a0b93-4561-4fe2-93ee-62493bc9807a.jpg";
 //import { Auth } from "./isauth";
 
 function Body() {
@@ -38,8 +38,16 @@ function Body() {
       for (let i = 0; i < checked.length; i++) {
         for (let j = 0; j < data.length; j++) {
           for (let k in data[j].params) {
-            if (data[j].params[k] === checked[i]) {
-              ids.add(data[j].id);
+            if (typeof data[j].params[k] === "object") {
+              for (let l = 0; l < data[j].params[k].length; l++) {
+                if (data[j].params[k][l] === checked[i]) {
+                  ids.add(data[j].id);
+                }
+              }
+            } else {
+              if (data[j].params[k] === checked[i]) {
+                ids.add(data[j].id);
+              }
             }
           }
         }
@@ -71,12 +79,24 @@ function Body() {
           <Filter />
         </div>
         <div className="mx-auto">
-        <div className="relative flex justify-center">
-            <img className="object-cover h-72 w-full rounded-lg my-2 opacity-75" src={coolImage} alt="Welcome"/>
+          <div className="relative flex justify-center">
+            <img
+              className="object-cover h-72 w-full rounded-lg my-2 opacity-75"
+              src={coolImage}
+              alt="Welcome"
+            />
             <div className="absolute w-10/12 flex flex-col items-center top-16 text-center drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
-              <h1 className="text-5xl font-bold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">Welcome to our store</h1>
-              <p className="text-2xl font-semibold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ante justo. Integer euismod libero id mauris malesuada tincidunt.</p>
-              <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">Constructor</button>
+              <h1 className="text-5xl font-bold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
+                Welcome to our store
+              </h1>
+              <p className="text-2xl font-semibold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
+                ante justo. Integer euismod libero id mauris malesuada
+                tincidunt.
+              </p>
+              <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
+                Constructor
+              </button>
             </div>
           </div>
           <div className="container grid grid-cols-1 pl-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 break-words">
