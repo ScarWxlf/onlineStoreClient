@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Rating, Typography } from "@material-tailwind/react";
 import data from "../db/data";
@@ -44,19 +44,96 @@ function DetailsPage() {
       );
     }
   }
-  //console.log(colorButtons);
+
+  const [hid, setHid] = React.useState(false);
+  const divVis = () => {
+    setHid(false);
+  };
+  const divInvis = () => {
+    setHid(true);
+  };
+
+  useEffect(() => {
+    const image = document.getElementById("image");
+    const result = document.getElementById("result");
+    const lens = document.getElementById("lens");
+    // let zoom = 3;
+
+    result.style.backgroundImage = `url(${image.src})`;
+    // let bw=3;
+    let cx = result.offsetWidth / lens.offsetWidth;
+    let cy = result.offsetHeight / lens.offsetHeight;
+    //240 180 1.875
+    result.style.backgroundSize =
+      image.width * cx + "px " + image.height * cy + "px";
+
+    result.addEventListener("mousemove", moveLens);
+    image.addEventListener("mousemove", moveLens);
+    lens.addEventListener("mousemove", moveLens);
+    /*and also for touch screens:*/
+    result.addEventListener("touchmove", moveLens);
+    image.addEventListener("touchmove", moveLens);
+
+    function moveLens(e) {
+      let pos, x, y;
+      e.preventDefault();
+      pos = imageSee(e);
+      x = pos.x - lens.offsetWidth / 2;
+      y = pos.y - lens.offsetHeight / 2;
+      /*prevent the magnifier glass from being positioned outside the image:*/
+      if (x > image.width - lens.offsetWidth) {
+        x = image.width - lens.offsetWidth;
+      }
+      if (x < 0) {
+        x = 0;
+      }
+      if (y > image.height - lens.offsetHeight) {
+        y = image.height - lens.offsetHeight;
+      }
+      if (y < 0) {
+        y = 0;
+      }
+      lens.style.left = x + "px";
+      lens.style.top = y + "px";
+      result.style.backgroundPosition = "-" + x * cx + "px -" + y * cy + "px";
+    }
+
+    function imageSee(e) {
+      const bb = image.getBoundingClientRect();
+      let x = e.pageX - bb.left;
+      let y = e.pageY - bb.top;
+      x = x - window.scrollX;
+      y = y - window.scrollY;
+
+      return { x: x, y: y };
+    }
+  }, []);
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-grow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row -mx-4">
           <div className="md:flex-1 px-4">
-            <div className="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+              <div
+                id="lens"
+                className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${hid ? "hidden" : ""}`}
+                onMouseOut={divInvis}
+              ></div>
               <img
-                className="w-full h-full object-cover"
+                id="image"
+                className="w-full h-full rounded-lg"
                 src={data[id - 1].img}
                 alt="Product"
+                onMouseEnter={divVis}
               />
+              <div
+                id="result"
+                className={`bg-black h-60 w-60 rounded-lg ms-10 top-0 absolute mouseFol ${
+                  hid ? "hidden" : ""
+                }`}
+                style={{ left: "32rem" }}
+              ></div>
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-1/2 px-2">

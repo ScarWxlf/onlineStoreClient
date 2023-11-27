@@ -2,7 +2,7 @@ const data = [
   {
     id: 1,
     title: "Product 1",
-    img: "https://picsum.photos/id/1/1100/1200",
+    img: "https://picsum.photos/id/1/1200/1200",
     star: 4.5,
     price: 19.99,
     params: {
@@ -19,7 +19,7 @@ const data = [
   {
     id: 2,
     title: "Product 2",
-    img: "https://picsum.photos/id/2/1100/1200",
+    img: "https://picsum.photos/id/2/1200/1200",
     star: 3.8,
     price: 12.99,
     params: {
@@ -34,7 +34,7 @@ const data = [
   {
     id: 3,
     title: "Product 3",
-    img: "https://picsum.photos/id/3/1100/1200",
+    img: "https://picsum.photos/id/3/1200/1200",
     star: 4.2,
     price: 15.99,
     params: {
@@ -49,7 +49,7 @@ const data = [
   {
     id: 4,
     title: "Product 4",
-    img: "https://picsum.photos/id/4/1100/1200",
+    img: "https://picsum.photos/id/4/1200/1200",
     star: 4.0,
     price: 9.99,
     params: {
@@ -65,7 +65,7 @@ const data = [
   {
     id: 5,
     title: "Product 5",
-    img: "https://picsum.photos/id/5/1100/1200",
+    img: "https://picsum.photos/id/5/1200/1200",
     star: 4.3,
     price: 14.99,
     params: {
@@ -80,7 +80,7 @@ const data = [
   {
     id: 6,
     title: "Product 6",
-    img: "https://picsum.photos/id/6/1100/1200",
+    img: "https://picsum.photos/id/6/1200/1200",
     star: 3.7,
     price: 11.99,
     params: {
@@ -95,7 +95,7 @@ const data = [
   {
     id: 7,
     title: "Product 7",
-    img: "https://picsum.photos/id/7/1100/1200",
+    img: "https://picsum.photos/id/7/1200/1200",
     star: 4.4,
     price: 16.99,
     params: {
@@ -110,7 +110,7 @@ const data = [
   {
     id: 8,
     title: "Product 8",
-    img: "https://picsum.photos/id/8/1100/1200",
+    img: "https://picsum.photos/id/8/1200/1200",
     star: 3.9,
     price: 13.99,
     params: {
@@ -125,7 +125,7 @@ const data = [
   {
     id: 9,
     title: "Product 9",
-    img: "https://picsum.photos/id/9/1100/1200",
+    img: "https://picsum.photos/id/9/1200/1200",
     star: 4.7,
     price: 21.99,
     params: {
@@ -140,7 +140,7 @@ const data = [
   {
     id: 10,
     title: "Product 10",
-    img: "https://picsum.photos/id/10/1100/1200",
+    img: "https://picsum.photos/id/10/1200/1200",
     star: 4.2,
     price: 18.99,
     params: {
@@ -155,7 +155,7 @@ const data = [
   {
     id: 11,
     title: "Product 11",
-    img: "https://picsum.photos/id/11/1100/1200",
+    img: "https://picsum.photos/id/11/1200/1200",
     star: 4.6,
     price: 20.99,
     params: {
@@ -170,7 +170,7 @@ const data = [
   {
     id: 12,
     title: "Product 12",
-    img: "https://picsum.photos/id/12/1100/1200",
+    img: "https://picsum.photos/id/12/1200/1200",
     star: 3.8,
     price: 15.99,
     params: {
@@ -185,7 +185,7 @@ const data = [
   {
     id: 13,
     title: "Product 13",
-    img: "https://picsum.photos/id/13/1100/1200",
+    img: "https://picsum.photos/id/13/1200/1200",
     star: 4.3,
     price: 19.99,
     params: {
@@ -200,7 +200,7 @@ const data = [
   {
     id: 14,
     title: "Product 14",
-    img: "https://picsum.photos/id/14/1100/1200",
+    img: "https://picsum.photos/id/14/1200/1200",
     star: 3.7,
     price: 12.99,
     params: {
@@ -215,7 +215,7 @@ const data = [
   {
     id: 15,
     title: "Product 15",
-    img: "https://picsum.photos/id/15/1100/1200",
+    img: "https://picsum.photos/id/15/1200/1200",
     star: 4.2,
     price: 15.99,
     params: {
@@ -230,7 +230,7 @@ const data = [
   {
     id: 16,
     title: "Product 16",
-    img: "https://picsum.photos/id/16/1100/1200",
+    img: "https://picsum.photos/id/16/1200/1200",
     star: 4.0,
     price: 9.99,
     params: {
@@ -245,7 +245,7 @@ const data = [
   {
     id: 17,
     title: "Product 17",
-    img: "https://picsum.photos/id/17/1100/1200",
+    img: "https://picsum.photos/id/17/1200/1200",
     star: 4.3,
     price: 14.99,
     params: {
@@ -260,7 +260,7 @@ const data = [
   {
     id: 18,
     title: "Product 18",
-    img: "https://picsum.photos/id/18/1100/1200",
+    img: "https://picsum.photos/id/18/1200/1200",
     star: 3.7,
     price: 11.99,
     params: {
@@ -275,7 +275,7 @@ const data = [
   {
     id: 19,
     title: "Product 19",
-    img: "https://picsum.photos/id/19/1100/1200",
+    img: "https://picsum.photos/id/19/1200/1200",
     star: 4.1,
     price: 17.99,
     params: {
@@ -291,7 +291,7 @@ const data = [
   {
     id: 20,
     title: "Product 20",
-    img: "https://picsum.photos/id/20/1100/1200",
+    img: "https://picsum.photos/id/20/1200/1200",
     star: 4.1,
     price: 17.99,
     params: {
