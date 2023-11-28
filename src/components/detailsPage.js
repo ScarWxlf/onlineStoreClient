@@ -45,7 +45,7 @@ function DetailsPage() {
     }
   }
 
-  const [hid, setHid] = React.useState(false);
+  const [hid, setHid] = React.useState(true);
   const divVis = () => {
     setHid(false);
   };
@@ -117,7 +117,7 @@ function DetailsPage() {
             <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
               <div
                 id="lens"
-                className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${hid ? "hidden" : ""}`}
+                className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${hid ? "collapse" : ""}`}
                 onMouseOut={divInvis}
               ></div>
               <img
@@ -129,8 +129,8 @@ function DetailsPage() {
               />
               <div
                 id="result"
-                className={`bg-black h-60 w-60 rounded-lg ms-10 top-0 absolute mouseFol ${
-                  hid ? "hidden" : ""
+                className={`bg-black h-60 w-60 rounded-lg ms-10 top-0 absolute ${
+                  hid ? "collapse" : ""
                 }`}
                 style={{ left: "32rem" }}
               ></div>
