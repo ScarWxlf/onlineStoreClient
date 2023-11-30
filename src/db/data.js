@@ -10,6 +10,7 @@ const data = [
       category: "Category 1",
       geef: "geef",
       dasda: "dasda",
+      firm: "Puma",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Great product!" },
@@ -25,6 +26,7 @@ const data = [
     params: {
       color: "Blue",
       category: "Category 2",
+      firm : "Nike",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Average product." },
@@ -40,6 +42,7 @@ const data = [
     params: {
       color: "Green",
       category: "Category 1",
+      firm : "Adidas",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing product!" },
@@ -55,6 +58,7 @@ const data = [
     params: {
       color: "Yellow",
       category: "Category 2",
+      firm : "Puma",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -71,6 +75,7 @@ const data = [
     params: {
       color: "Purple",
       category: "Category 1",
+      firm : "Nike",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -86,6 +91,7 @@ const data = [
     params: {
       color: "Orange",
       category: "Category 2",
+      firm : "New Balance"
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -101,6 +107,7 @@ const data = [
     params: {
       color: "Pink",
       category: "Category 1",
+      firm : "Under Armour"
     },
     reviews: [
       { id: 1, rating: 5, comment: "Fantastic product!" },
@@ -116,6 +123,7 @@ const data = [
     params: {
       color: "Gray",
       category: "Category 2",
+      firm : "Kappa"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Nice product." },
@@ -131,6 +139,7 @@ const data = [
     params: {
       color: "Brown",
       category: "Category 1",
+      firm : "Reebok"
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing quality!" },
@@ -146,6 +155,7 @@ const data = [
     params: {
       color: "White",
       category: "Category 2",
+      firm : "Quiksilver"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -161,6 +171,7 @@ const data = [
     params: {
       color: "Red",
       category: "Category 1",
+      firm : "Vans"
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -176,6 +187,7 @@ const data = [
     params: {
       color: "Blue",
       category: "Category 2",
+      firm : "Adidas"
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -191,6 +203,7 @@ const data = [
     params: {
       color: "Green",
       category: "Category 1",
+      firm : "Nike"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Great product!" },
@@ -206,6 +219,7 @@ const data = [
     params: {
       color: "Yellow",
       category: "Category 2",
+      firm : "Puma"
     },
     reviews: [
       { id: 1, rating: 3, comment: "Average product." },
@@ -221,6 +235,7 @@ const data = [
     params: {
       color: "Purple",
       category: "Category 1",
+      firm : "Zara"
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing product!" },
@@ -236,6 +251,7 @@ const data = [
     params: {
       color: "Orange",
       category: "Category 2",
+      firm : "Nike"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -251,6 +267,7 @@ const data = [
     params: {
       color: "Pink",
       category: "Category 1",
+      firm : "Filla"
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -266,6 +283,7 @@ const data = [
     params: {
       color: "Gray",
       category: "Category 2",
+      firm : "Mango"
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -281,6 +299,7 @@ const data = [
     params: {
       color: "Brown",
       category: "Category 1",
+      firm : "Asics"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good buy!" },
@@ -297,6 +316,7 @@ const data = [
     params: {
       color: "Black",
       category: "Category 1",
+      firm : "Reebok"
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good buy!" },

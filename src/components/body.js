@@ -67,44 +67,45 @@ function Body() {
 
   return (
     <div className="bg-gray-950 text-white flex-grow">
-      <div className="bg-gray-800 flex justify-start items-center h-10 text-black">
-        <input
-          placeholder="Search"
-          className="search ms-10 px-1 rounded-lg"
-          onChange={searchChange}
-        />
-      </div>
-      <div className="flex h-full">
-        <div className="bg-gray-900 container flex justify-center items-start w-60 h-full">
-          <Filter />
+      <div className="flex flex-col">
+        <div className="relative flex justify-center">
+          <img
+            className="object-cover h-72 w-full opacity-75"
+            src={coolImage}
+            alt="Welcome"
+          />
+          <div className="absolute w-10/12 flex flex-col items-center top-16 text-center drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
+            <h1 className="text-5xl font-bold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
+              Welcome to our store
+            </h1>
+            <p className="text-2xl font-semibold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
+              ante justo. Integer euismod libero id mauris malesuada tincidunt.
+            </p>
+            <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
+              Constructor
+            </button>
+          </div>
         </div>
-        <div className="mx-auto">
-          <div className="relative flex justify-center">
-            <img
-              className="object-cover h-72 w-full rounded-lg my-2 opacity-75"
-              src={coolImage}
-              alt="Welcome"
-            />
-            <div className="absolute w-10/12 flex flex-col items-center top-16 text-center drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
-              <h1 className="text-5xl font-bold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
-                Welcome to our store
-              </h1>
-              <p className="text-2xl font-semibold text-white drop-shadow-[0_10px_10px_rgba(0,0,0,1)]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-                ante justo. Integer euismod libero id mauris malesuada
-                tincidunt.
-              </p>
-              <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
-                Constructor
-              </button>
+        <div className="bg-gray-900 flex justify-start items-center h-10 text-black">
+          <input
+            placeholder="Search"
+            className="search ms-5 px-1 rounded-lg"
+            onChange={searchChange}
+          />
+        </div>
+        <div className="flex h-full">
+          <div className="bg-gray-900 container flex justify-start items-start w-40 sm:w-40 md:w-44 lg:w-48 xl:w-52 2xl:w-60">
+            <Filter />
+          </div>
+          <div className="mx-10">
+            <div className="container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 break-words">
+              {items}
             </div>
-          </div>
-          <div className="container grid grid-cols-1 pl-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 break-words">
-            {items}
-          </div>
-          <div className="flex flex-col items-center justify-center mt-1">
-            <p className="ms-4 mb-2">Pages</p>
-            <Pagination />
+            <div className="flex flex-col items-center justify-center mt-1">
+              <p className="ms-4 mb-2">Pages</p>
+              <Pagination />
+            </div>
           </div>
         </div>
       </div>
