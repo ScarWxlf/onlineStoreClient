@@ -11,6 +11,7 @@ const data = [
       geef: "geef",
       dasda: "dasda",
       firm: "Puma",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Great product!" },
@@ -27,6 +28,7 @@ const data = [
       color: "Blue",
       category: "Category 2",
       firm : "Nike",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Average product." },
@@ -43,6 +45,7 @@ const data = [
       color: "Green",
       category: "Category 1",
       firm : "Adidas",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing product!" },
@@ -59,6 +62,7 @@ const data = [
       color: "Yellow",
       category: "Category 2",
       firm : "Puma",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -76,6 +80,7 @@ const data = [
       color: "Purple",
       category: "Category 1",
       firm : "Nike",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -91,7 +96,8 @@ const data = [
     params: {
       color: "Orange",
       category: "Category 2",
-      firm : "New Balance"
+      firm : "New Balance",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -107,7 +113,8 @@ const data = [
     params: {
       color: "Pink",
       category: "Category 1",
-      firm : "Under Armour"
+      firm : "Under Armour",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Fantastic product!" },
@@ -123,7 +130,8 @@ const data = [
     params: {
       color: "Gray",
       category: "Category 2",
-      firm : "Kappa"
+      firm : "Kappa",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Nice product." },
@@ -139,7 +147,8 @@ const data = [
     params: {
       color: "Brown",
       category: "Category 1",
-      firm : "Reebok"
+      firm : "Reebok",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing quality!" },
@@ -155,7 +164,8 @@ const data = [
     params: {
       color: "White",
       category: "Category 2",
-      firm : "Quiksilver"
+      firm : "Quiksilver",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -171,7 +181,8 @@ const data = [
     params: {
       color: "Red",
       category: "Category 1",
-      firm : "Vans"
+      firm : "Vans",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -187,7 +198,8 @@ const data = [
     params: {
       color: "Blue",
       category: "Category 2",
-      firm : "Adidas"
+      firm : "Adidas",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -203,7 +215,8 @@ const data = [
     params: {
       color: "Green",
       category: "Category 1",
-      firm : "Nike"
+      firm : "Nike",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Great product!" },
@@ -219,7 +232,8 @@ const data = [
     params: {
       color: "Yellow",
       category: "Category 2",
-      firm : "Puma"
+      firm : "Puma",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Average product." },
@@ -235,7 +249,8 @@ const data = [
     params: {
       color: "Purple",
       category: "Category 1",
-      firm : "Zara"
+      firm : "Zara",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Amazing product!" },
@@ -251,7 +266,8 @@ const data = [
     params: {
       color: "Orange",
       category: "Category 2",
-      firm : "Nike"
+      firm : "Nike",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good product." },
@@ -267,7 +283,8 @@ const data = [
     params: {
       color: "Pink",
       category: "Category 1",
-      firm : "Filla"
+      firm : "Filla",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 5, comment: "Awesome product!" },
@@ -283,7 +300,8 @@ const data = [
     params: {
       color: "Gray",
       category: "Category 2",
-      firm : "Mango"
+      firm : "Mango",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 3, comment: "Not bad." },
@@ -299,7 +317,8 @@ const data = [
     params: {
       color: "Brown",
       category: "Category 1",
-      firm : "Asics"
+      firm : "Asics",
+      availability: "In Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good buy!" },
@@ -316,7 +335,8 @@ const data = [
     params: {
       color: "Black",
       category: "Category 1",
-      firm : "Reebok"
+      firm : "Reebok",
+      availability: "Out of Stock",
     },
     reviews: [
       { id: 1, rating: 4, comment: "Good buy!" },

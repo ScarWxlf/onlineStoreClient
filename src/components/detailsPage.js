@@ -172,7 +172,7 @@ function DetailsPage() {
                 </span>
                 <span className="text-gray-600 dark:text-gray-300">
                   {" "}
-                  In Stock
+                  {data[id - 1].params.availability}
                 </span>
               </div>
             </div>

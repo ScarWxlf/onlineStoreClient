@@ -62,27 +62,36 @@ function Filter() {
     e.currentTarget.firstElementChild.classList.toggle("rotate-180");
   };
 
+  const Uwu = (e) => {
+    e.currentTarget.nextElementSibling.classList.toggle("bg-blue-700");
+  };
+
   return (
     <div className="flex flex-col gap-2 justify-start mt-1 w-full rounded-b-lg h-full">
       {Object.keys(categories).map((category) => {
           return (
             <div className="w-full rounded-b-lg">
-              <div className="ps-5 bg-gray-900 rounded-sm w-full">
-                <div className="flex w-full py-2">
+              <div className="bg-gray-900 rounded-sm w-full">
+                <div className="flex justify-center w-full py-2">
                   <button
-                    className="flex items-center justify-start gap-1 w-full"
+                    className="flex relative items-center justify-start gap-1 w-4/5"
                     id={ids++}
                     onClick={Show}
+                    
                   >
                     <ChevronDownIcon
                       strokeWidth={2.5}
-                      className="h-4 w-4"
+                      className="ms-3 h-4 w-4 z-10"
                     />
-                    <h1 className="text-2xl capitalize">{category}</h1>
+                    <h1 pointer-events="none" className="text-2xl capitalize z-10"
+                    onMouseEnter={Uwu}
+                    onMouseOut={Uwu}
+                    >{category}</h1>
+                    <div className="absolute w-48 h-4 bg-gray-950 hover:bg-blue-700 rounded-lg blur-lg"></div>
                   </button>
                 </div>
                 <div className="hidden">
-                <div className="flex flex-wrap gap-2 rounded-lg p-2">
+                <div className="ps-4 flex flex-wrap gap-2 rounded-lg p-2">
                   {Array.from(categories[category]).map((value) => {
                     return (
                       <label className="flex items-center input-wrapper px-2 rounded-full border border-gray-300">
