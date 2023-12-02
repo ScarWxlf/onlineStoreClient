@@ -53,6 +53,16 @@ function DetailsPage() {
     setHid(true);
   };
 
+  const addToCart = () => {
+    let items = JSON.parse(localStorage.getItem("cart"));
+    if(items === null){
+      localStorage.setItem("cart", JSON.stringify(id));
+    }
+    else{
+    localStorage.setItem("cart", JSON.stringify(id + " " + items));
+    }
+  }
+
   useEffect(() => {
     const image = document.getElementById("image");
     const result = document.getElementById("result");
@@ -117,7 +127,9 @@ function DetailsPage() {
             <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
               <div
                 id="lens"
-                className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${hid ? "collapse" : ""}`}
+                className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${
+                  hid ? "collapse" : ""
+                }`}
                 onMouseOut={divInvis}
               ></div>
               <img
@@ -135,15 +147,10 @@ function DetailsPage() {
                 style={{ left: "32rem" }}
               ></div>
             </div>
-            <div className="flex -mx-2 mb-4">
+            <div className="flex -mx-2 mb-4 justify-center">
               <div className="w-1/2 px-2">
-                <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+                <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700" onClick={addToCart}>
                   Add to Cart
-                </button>
-              </div>
-              <div className="w-1/2 px-2">
-                <button className="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600">
-                  Add to Wishlist
                 </button>
               </div>
             </div>
@@ -234,6 +241,40 @@ function DetailsPage() {
               </p>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col gap-3 mt-14">
+          {Array.from(data[id - 1].reviews).map((review) => {
+            return (
+              <div className="flex flex-col gap-4 bg-gray-700 p-4 rounded-lg text-white">
+                <div className="flex justify justify-between">
+                  <div className="flex gap-2">
+                    <div className="w-7 h-7 text-center rounded-full bg-green-700">
+                      {review.name[0]}
+                    </div>
+                    <span>{review.name}</span>
+                  </div>
+                  <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                    <Rating
+                      className="flex text-yellow-400"
+                      value={review.rating}
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  {review.comment}
+                </div>
+
+                <div className="flex justify-between">
+                  <span>{review.date}</span>
+                  <button className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg">
+                    Share
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

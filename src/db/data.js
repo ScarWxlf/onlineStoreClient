@@ -14,8 +14,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Great product!" },
-      { id: 2, rating: 5, comment: "Excellent quality!" },
+      { id: 1, rating: 4, comment: "Great product!", name: "John", date: "2022-01-01" },
+      { id: 2, rating: 5, comment: "Excellent quality!", name: "Jane", date: "2022-01-02" },
     ],
   },
   {
@@ -31,8 +31,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 3, comment: "Average product." },
-      { id: 2, rating: 4, comment: "Good value for money." },
+      { id: 1, rating: 3, comment: "Average product.", name: "Mike", date: "2022-01-03" },
+      { id: 2, rating: 4, comment: "Good value for money.", name: "Sarah", date: "2022-01-04" },
     ],
   },
   {
@@ -48,8 +48,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Amazing product!" },
-      { id: 2, rating: 4, comment: "Highly recommended!" },
+      { id: 1, rating: 5, comment: "Amazing product!", name: "David", date: "2022-01-05" },
+      { id: 2, rating: 4, comment: "Highly recommended!", name: "Emily", date: "2022-01-06" },
     ],
   },
   {
@@ -65,8 +65,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Good product." },
-      { id: 2, rating: 3, comment: "Decent quality." },
+      { id: 1, rating: 4, comment: "Good product.", name: "Michael", date: "2022-01-07" },
+      { id: 2, rating: 3, comment: "Decent quality.", name: "Jessica", date: "2022-01-08" },
     ],
   },
   // Add 16 more objects
@@ -83,8 +83,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Awesome product!" },
-      { id: 2, rating: 4, comment: "Great value!" },
+      { id: 1, rating: 5, comment: "Awesome product!", name: "Robert", date: "2022-01-09" },
+      { id: 2, rating: 4, comment: "Great value!", name: "Olivia", date: "2022-01-10" },
     ],
   },
   {
@@ -100,8 +100,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 3, comment: "Not bad." },
-      { id: 2, rating: 2, comment: "Could be better." },
+      { id: 1, rating: 3, comment: "Not bad.", name: "William", date: "2022-01-11" },
+      { id: 2, rating: 2, comment: "Could be better.", name: "Sophia", date: "2022-01-12" },
     ],
   },
   {
@@ -117,8 +117,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Fantastic product!" },
-      { id: 2, rating: 4, comment: "Great quality!" },
+      { id: 1, rating: 5, comment: "Fantastic product!", name: "James", date: "2022-01-13" },
+      { id: 2, rating: 4, comment: "Great quality!", name: "Ava", date: "2022-01-14" },
     ],
   },
   {
@@ -134,8 +134,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Nice product." },
-      { id: 2, rating: 3, comment: "Decent value." },
+      { id: 1, rating: 4, comment: "Nice product.", name: "Benjamin", date: "2022-01-15" },
+      { id: 2, rating: 3, comment: "Decent value.", name: "Mia", date: "2022-01-16" },
     ],
   },
   {
@@ -151,8 +151,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Amazing quality!" },
-      { id: 2, rating: 4, comment: "Highly satisfied!" },
+      { id: 1, rating: 5, comment: "Amazing quality!", name: "Ethan", date: "2022-01-17" },
+      { id: 2, rating: 4, comment: "Highly satisfied!", name: "Charlotte", date: "2022-01-18" },
     ],
   },
   {
@@ -168,8 +168,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Good product." },
-      { id: 2, rating: 3, comment: "Decent quality." },
+      { id: 1, rating: 4, comment: "Good product.", name: "Daniel", date: "2022-01-19" },
+      { id: 2, rating: 3, comment: "Decent quality.", name: "Harper", date: "2022-01-20" },
     ],
   },
   {
@@ -185,8 +185,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Awesome product!" },
-      { id: 2, rating: 4, comment: "Great value!" },
+      { id: 1, rating: 5, comment: "Awesome product!", name: "Alexander", date: "2022-01-21" },
+      { id: 2, rating: 4, comment: "Great value!", name: "Ella", date: "2022-01-22" },
     ],
   },
   {
@@ -202,8 +202,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 3, comment: "Not bad." },
-      { id: 2, rating: 2, comment: "Could be better." },
+      { id: 1, rating: 3, comment: "Not bad.", name: "Matthew", date: "2022-01-23" },
+      { id: 2, rating: 2, comment: "Could be better.", name: "Lily", date: "2022-01-24" },
     ],
   },
   {
@@ -219,8 +219,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Great product!" },
-      { id: 2, rating: 5, comment: "Excellent quality!" },
+      { id: 1, rating: 4, comment: "Great product!", name: "Christopher", date: "2022-01-25" },
+      { id: 2, rating: 5, comment: "Excellent quality!", name: "Grace", date: "2022-01-26" },
     ],
   },
   {
@@ -236,8 +236,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 3, comment: "Average product." },
-      { id: 2, rating: 4, comment: "Good value for money." },
+      { id: 1, rating: 3, comment: "Average product.", name: "Andrew", date: "2022-01-27" },
+      { id: 2, rating: 4, comment: "Good value for money.", name: "Zoe", date: "2022-01-28" },
     ],
   },
   {
@@ -253,8 +253,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Amazing product!" },
-      { id: 2, rating: 4, comment: "Highly recommended!" },
+      { id: 1, rating: 5, comment: "Amazing product!", name: "Ryan", date: "2022-01-29" },
+      { id: 2, rating: 4, comment: "Highly recommended!", name: "Victoria", date: "2022-01-30" },
     ],
   },
   {
@@ -270,8 +270,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Good product." },
-      { id: 2, rating: 3, comment: "Decent quality." },
+      { id: 1, rating: 4, comment: "Good product.", name: "John", date: "2022-01-31" },
+      { id: 2, rating: 3, comment: "Decent quality.", name: "Emma", date: "2022-02-01" },
     ],
   },
   {
@@ -287,8 +287,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 5, comment: "Awesome product!" },
-      { id: 2, rating: 4, comment: "Great value!" },
+      { id: 1, rating: 5, comment: "Awesome product!", name: "David", date: "2022-02-02" },
+      { id: 2, rating: 4, comment: "Great value!", name: "Olivia", date: "2022-02-03" },
     ],
   },
   {
@@ -304,8 +304,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 3, comment: "Not bad." },
-      { id: 2, rating: 2, comment: "Could be better." },
+      { id: 1, rating: 3, comment: "Not bad.", name: "William", date: "2022-02-04" },
+      { id: 2, rating: 2, comment: "Could be better.", name: "Sophia", date: "2022-02-05" },
     ],
   },
   {
@@ -321,8 +321,8 @@ const data = [
       availability: "In Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Good buy!" },
-      { id: 2, rating: 5, comment: "Impressive!" },
+      { id: 1, rating: 4, comment: "Good buy!", name: "Benjamin", date: "2022-02-06" },
+      { id: 2, rating: 5, comment: "Impressive!", name: "Mia", date: "2022-02-07" },
     ],
   },
   // ...
@@ -339,8 +339,8 @@ const data = [
       availability: "Out of Stock",
     },
     reviews: [
-      { id: 1, rating: 4, comment: "Good buy!" },
-      { id: 2, rating: 5, comment: "Impressive!" },
+      { id: 1, rating: 4, comment: "Good buy!", name: "Daniel", date: "2022-02-08" },
+      { id: 2, rating: 5, comment: "Impressive!", name: "Harper", date: "2022-02-09" },
     ],
   },
 ];
