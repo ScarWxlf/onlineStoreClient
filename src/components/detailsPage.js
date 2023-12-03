@@ -55,13 +55,18 @@ function DetailsPage() {
 
   const addToCart = () => {
     let items = JSON.parse(localStorage.getItem("cart"));
-    if(items === null){
+    if (items === null) {
       localStorage.setItem("cart", JSON.stringify(id));
+    } else {
+      if (items === "")
+      {
+        localStorage.setItem("cart", JSON.stringify(id));
+      }
+      else{
+        localStorage.setItem("cart", JSON.stringify(id + " " + items));
+      }
     }
-    else{
-    localStorage.setItem("cart", JSON.stringify(id + " " + items));
-    }
-  }
+  };
 
   useEffect(() => {
     const image = document.getElementById("image");
@@ -149,7 +154,10 @@ function DetailsPage() {
             </div>
             <div className="flex -mx-2 mb-4 justify-center">
               <div className="w-1/2 px-2">
-                <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700" onClick={addToCart}>
+                <button
+                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  onClick={addToCart}
+                >
                   Add to Cart
                 </button>
               </div>
@@ -262,9 +270,7 @@ function DetailsPage() {
                   </div>
                 </div>
 
-                <div>
-                  {review.comment}
-                </div>
+                <div>{review.comment}</div>
 
                 <div className="flex justify-between">
                   <span>{review.date}</span>
