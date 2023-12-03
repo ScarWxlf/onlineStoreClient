@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import Item from "./item";
-import Pagination from "./pages";
 import data from "../db/data";
 import Filter, { updateCheckeds } from "./filter";
 import coolImage from "../images/c41a0b93-4561-4fe2-93ee-62493bc9807a.jpg";
@@ -12,12 +11,27 @@ function Body() {
 
   const checked = updateCheckeds();
   const [items, setItems] = useState([]);
-
   const [search, setSearch] = useState("");
+  const pages = [];
+  for (let i = 0; i < data.length / 20; i++) {
+    pages.push(i);
+  }
 
   const searchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  if (localStorage.getItem("page") === null) {
+    localStorage.setItem("page", 1);
+  }
+
+  const changePage = (e) => {
+    localStorage.setItem("page", e.currentTarget.textContent);
+    console.log(localStorage.getItem("page")*20);
+  };
+
+  const toProducts = localStorage.getItem("page")*20;
+  const fromProducts = toProducts - 20;
 
   useEffect(() => {
     let allItems = [];
@@ -29,14 +43,14 @@ function Body() {
           }
         }
       } else {
-        for (let i = 0; i < 20; i++) {
+        for (let i = fromProducts; i < toProducts; i++) {
           allItems.push(<Item id={data[i].id} />);
         }
       }
     } else {
       let ids = new Set();
       for (let i = 0; i < checked.length; i++) {
-        for (let j = 0; j < data.length; j++) {
+        for (let j = fromProducts; j < toProducts; j++) {
           for (let k in data[j].params) {
             if (typeof data[j].params[k] === "object") {
               for (let l = 0; l < data[j].params[k].length; l++) {
@@ -63,7 +77,7 @@ function Body() {
       });
     }
     setItems(allItems);
-  }, [checked, search]);
+  }, [checked, search, fromProducts, toProducts]);
 
   return (
     <div className="bg-gray-950 text-white flex-grow">
@@ -104,7 +118,24 @@ function Body() {
             </div>
             <div className="flex flex-col items-center justify-center mt-1">
               <p className="ms-4 mb-2">Pages</p>
-              <Pagination />
+
+              <nav aria-label="Page navigation example">
+                <ul class="list-style-none mb-6 flex">
+                  {pages.map((page) => {
+                    return (
+                      <li>
+                        <a
+                          class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100  dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+                          href="/"
+                          onClick={changePage}
+                        >
+                          {page + 1}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

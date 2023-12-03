@@ -6,7 +6,6 @@ function Cart() {
   function checkCart() {
     allItems = JSON.parse(localStorage.getItem("cart"));
 
-    console.log(allItems);
     if (allItems === null || allItems === undefined || allItems === "") {
       Subtotal = 0; 
       Shipping = 0;
