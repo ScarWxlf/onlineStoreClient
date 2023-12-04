@@ -13,7 +13,7 @@ function Body() {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
   const pages = [];
-  for (let i = 0; i < data.length / 20; i++) {
+  for (let i = 1; i <= data.length / 20; i++) {
     pages.push(i);
   }
 
@@ -32,8 +32,10 @@ function Body() {
 
   const toProducts = localStorage.getItem("page")*20;
   const fromProducts = toProducts - 20;
-
+  
   useEffect(() => {
+    document.getElementById(`page${localStorage.getItem("page")}`).classList.add("bg-gray-700");
+    
     let allItems = [];
     if (checked.length === 0) {
       if (search.length > 0) {
@@ -125,11 +127,12 @@ function Body() {
                     return (
                       <li>
                         <a
-                          class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100  dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+                          class="relative block rounded px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100  dark:text-white dark:hover:bg-gray-500 dark:hover:text-white"
                           href="/"
                           onClick={changePage}
+                          id={`page${page}`}
                         >
-                          {page + 1}
+                          {page}
                         </a>
                       </li>
                     );

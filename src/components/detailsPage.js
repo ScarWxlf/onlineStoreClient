@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Rating, Typography } from "@material-tailwind/react";
 import data from "../db/data";
+import Item from "./item";
 
 function DetailsPage() {
   const [rated, setRated] = React.useState(4);
@@ -58,15 +59,36 @@ function DetailsPage() {
     if (items === null) {
       localStorage.setItem("cart", JSON.stringify(id));
     } else {
-      if (items === "")
-      {
+      if (items === "") {
         localStorage.setItem("cart", JSON.stringify(id));
-      }
-      else{
+      } else {
         localStorage.setItem("cart", JSON.stringify(id + " " + items));
       }
     }
   };
+
+  function getSimilar() {
+    let similar = [];
+    let ids = new Set();
+    for (let i = 0; i < data.length; i++) {
+      for (let k in data[i].params) {
+        if (k === "color" || k === "availability") continue;
+        if (
+          data[i].params[k] === data[id - 1].params[k] &&
+          data[i].id !== parseInt(id)
+        ) {
+          console.log(data[i].params[k]);
+          ids.add(data[i].id);
+        }
+      }
+    }
+    ids.forEach((id) => {
+      similar.push(<Item id={id} />);
+    });
+    return similar;
+  }
+  let similar = getSimilar();
+  console.log(similar);
 
   useEffect(() => {
     const image = document.getElementById("image");
@@ -125,7 +147,7 @@ function DetailsPage() {
   }, []);
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-grow">
+    <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row -mx-4">
           <div className="md:flex-1 px-4">
@@ -281,6 +303,33 @@ function DetailsPage() {
               </div>
             );
           })}
+        </div>
+      </div>
+      <div className="flex flex-col items-center mt-5 mx-7">
+        <h1 className="text-3xl mb-2 text-white">Similar products</h1>
+        <div className="inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow w-full rounded-lg">
+          <div
+            className="relative bg-gray-900 text-white w-full text-4xl flex items-center justify-center pr-2"
+            style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
+          >
+            {"scrcll"}
+            <div className="absolute ml-7 mt-12" style={{ paddingTop: "4px" }}>
+              {">"}
+            </div>
+          </div>
+          {similar.map((item) => {
+            return <div className="flex flex-none">{item}</div>;
+          })}
+          <div
+            className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"
+            style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
+          >
+            {"scr ll"}
+            <div className="absolute mr-7 mt-12" style={{ paddingTop: "4px" }}>
+              {"<"}
+            </div>
+            <div className="absolute mt-16 pb-2 rotate-180">{"c"}</div>
+          </div>
         </div>
       </div>
     </div>

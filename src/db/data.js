@@ -17,6 +17,7 @@ const data = [
       { id: 1, rating: 4, comment: "Great product!", name: "John", date: "2022-01-01" },
       { id: 2, rating: 5, comment: "Excellent quality!", name: "Jane", date: "2022-01-02" },
     ],
+    size: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: 2,
