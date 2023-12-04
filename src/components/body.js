@@ -98,9 +98,11 @@ function Body() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
               ante justo. Integer euismod libero id mauris malesuada tincidunt.
             </p>
+            <a href="/merch-editor">
             <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
               Constructor
             </button>
+            </a>
           </div>
         </div>
         <div className="bg-gray-900 flex justify-start items-center h-10 text-black">
