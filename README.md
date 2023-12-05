@@ -1,5 +1,5 @@
 # Getting Started with Create React App
-
+This project was hosted in http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
