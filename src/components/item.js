@@ -6,9 +6,11 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import data from "../db/data";
+//import data from "../db/data";
 
 function Item({id}) {
+  const data = JSON.parse(localStorage.getItem("products"))
+
   return (
     <Card className="!bg-gray-950 w-70 my-2 outline outline-1 rounded-xl">
       <CardHeader shadow={false} floated={false} className=" !bg-gray-950 h-60 m-0">

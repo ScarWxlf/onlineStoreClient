@@ -1,7 +1,9 @@
 import React from "react";
-import data from "../db/data";
+//import data from "../db/data";
 
 function Cart() {
+  const data = JSON.parse(localStorage.getItem("products"))
+
   let allItems, cartItems, Subtotal, Shipping, Total;
   function checkCart() {
     allItems = JSON.parse(localStorage.getItem("cart"));
@@ -65,7 +67,7 @@ function Cart() {
                   <h1 className="text-3xl">Cart is empty now -_-</h1>
                   <a href="/">
                     <button className="mt-5 rounded-lg bg-blue-800 p-2 hover:bg-blue-600">
-                      By something
+                      Buy something
                     </button>
                   </a>
                 </div>

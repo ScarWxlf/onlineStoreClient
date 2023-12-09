@@ -10,6 +10,7 @@ import Footer from "./components/footer";
 import DetailsPage from "./components/detailsPage";
 import Cart from "./components/cart";
 import MerchEditor from "./components/merchEditor";
+import EditProduct from "./components/editProduct";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="sign-in" element={<SignInPage />}/>
           <Route path=":id/details" element={<DetailsPage />} />
+          <Route path=":id/details/edit" element={<EditProduct/>}/>
           <Route path="cart" element={<Cart />} />
           <Route path="merch-editor" element={<MerchEditor />} />
         </Route>

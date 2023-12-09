@@ -12,12 +12,13 @@ const data = [
       dasda: "dasda",
       firm: "Puma",
       availability: "In Stock",
+      size: ["S", "M", "L", "XL", "XXL"],
     },
     reviews: [
       { id: 1, rating: 4, comment: "Great product!", name: "John", date: "2022-01-01" },
       { id: 2, rating: 5, comment: "Excellent quality!", name: "Jane", date: "2022-01-02" },
     ],
-    size: ["S", "M", "L", "XL", "XXL"],
+    author: "David"
   },
   {
     id: 2,
@@ -1367,5 +1368,12 @@ const data = [
     ],
   },
 ];
+
+for (let i = 0; i< data.length; i++){
+  data[i].shortDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ante justo. Integer euismod libero id mauris malesuada tincidunt."
+  data[i].longDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ante justo. Integer euismod libero id mauris malesuada tincidunt. Vivamus commodo nulla ut lorem rhoncus aliquet. Duis dapibus augue vel ipsum pretium, et venenatis sem blandit. Quisque ut erat vitae nisi ultrices placerat non eget velit. Integer ornare mi sed ipsum lacinia, non sagittis mauris blandit. Morbi fermentum libero vel nisl suscipit, nec tincidunt mi consectetur."
+  data[i].params.size = ["S", "M", "L", "XL", "XXL"]
+  data[i].author = "David"
+}
 
 export default data;

@@ -1,5 +1,5 @@
 import React from "react";
-import data from "../db/data";
+//import data from "../db/data";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 function Checkeds() {
@@ -15,9 +15,11 @@ function Checkeds() {
 
 export function updateCheckeds() {
   return Checkeds();
-}
+} 
 
 function Filter() {
+  const data = JSON.parse(localStorage.getItem("products"))
+
   function allFilters() {
     const categories = {};
     for (let item of data) {
@@ -60,43 +62,38 @@ function Filter() {
   const Show = (e) => {
     e.currentTarget.parentElement.nextElementSibling.classList.toggle("hidden");
     e.currentTarget.firstElementChild.classList.toggle("rotate-180");
-  };
 
-  const Uwu = (e) => {
-    e.currentTarget.nextElementSibling.classList.toggle("bg-blue-700");
+    e.currentTarget.classList.toggle("rounded-full");
+    e.currentTarget.classList.toggle("rounded-t-2xl");
   };
 
   return (
-    <div className="flex flex-col gap-2 justify-start mt-1 w-full rounded-b-lg h-full">
+    <div className="flex flex-col justify-start w-full rounded-b-lg h-full">
       {Object.keys(categories).map((category) => {
           return (
             <div className="w-full rounded-b-lg">
-              <div className="bg-gray-900 rounded-sm w-full">
-                <div className="flex justify-center w-full py-2">
+              <div className="bg-gray-900 rounded-sm w-full flex flex-col items-center">
+                <div className="flex justify-center w-full pt-2">
                   <button
-                    className="flex relative items-center justify-start gap-1 w-4/5"
+                    className="flex relative items-center justify-start gap-1 w-11/12 bg-sky-950 rounded-t-2xl hover:bg-sky-800"
                     id={ids++}
                     onClick={Show}
-                    
                   >
                     <ChevronDownIcon
                       strokeWidth={2.5}
                       className="ms-3 h-4 w-4 z-10"
                     />
                     <h1 pointer-events="none" className="text-2xl capitalize z-10"
-                    onMouseEnter={Uwu}
-                    onMouseOut={Uwu}
                     >{category}</h1>
-                    <div className="absolute w-48 h-4 bg-gray-950 hover:bg-blue-700 rounded-lg blur-lg"></div>
                   </button>
                 </div>
-                <div className="hidden">
+                <div className="bg-sky-950 rounded-b-3xl w-11/12">
                 <div className="ps-4 flex flex-wrap gap-2 rounded-lg p-2">
                   {Array.from(categories[category]).map((value) => {
                     return (
-                      <label className="flex items-center input-wrapper px-2 rounded-full border border-gray-300">
+                      <label className="flex items-center input-wrapper px-2 rounded-full hover:bg-sky-800">
                         <input
-                          className="filter me-1 accent-current "
+                          className="filter me-1 accent-green-500"
                           type="checkbox"
                           name=""
                           onChange={() => updateCheckeds()}
@@ -112,7 +109,7 @@ function Filter() {
                 </div>
                 </div>
               </div>
-                <hr className="mt-1" />
+                {/* <hr className="mt-1 opacity-25" /> */}
             </div>
           );
       }, categories)}

@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Rating, Typography } from "@material-tailwind/react";
-import data from "../db/data";
+//import data from "../db/data";
 import Item from "./item";
 
 function DetailsPage() {
+  const data = JSON.parse(localStorage.getItem("products"));
+
+  const user = localStorage.getItem("user");
   const [rated, setRated] = React.useState(4);
   let { id } = useParams();
   const [color] = React.useState(data[id - 1].params.color);
@@ -77,7 +80,6 @@ function DetailsPage() {
           data[i].params[k] === data[id - 1].params[k] &&
           data[i].id !== parseInt(id)
         ) {
-          console.log(data[i].params[k]);
           ids.add(data[i].id);
         }
       }
@@ -87,8 +89,7 @@ function DetailsPage() {
     });
     return similar;
   }
-  let similar = getSimilar();
-  console.log(similar);
+  let similar = getSimilar(); 
 
   useEffect(() => {
     const image = document.getElementById("image");
@@ -148,10 +149,10 @@ function DetailsPage() {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row -mx-4">
-          <div className="md:flex-1 px-4">
-            <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex flex-col w-full md:flex-row -mx-4">
+          <div className="w-1/2 px-4">
+            <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4 w-full">
               <div
                 id="lens"
                 className={`absolute border cursor-none bg-red-700 opacity-40 rounded-lg w-32 h-32 ${
@@ -168,7 +169,7 @@ function DetailsPage() {
               />
               <div
                 id="result"
-                className={`bg-black h-60 w-60 rounded-lg ms-10 top-0 absolute ${
+                className={`bg-black h-60 w-60 rounded-lg -ms-96 top-100 md:ms-10 md:top-0 absolute ${
                   hid ? "collapse" : ""
                 }`}
                 style={{ left: "32rem" }}
@@ -185,13 +186,25 @@ function DetailsPage() {
               </div>
             </div>
           </div>
-          <div className="md:flex-1 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-              {data[id - 1].title}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-              ante justo. Integer euismod libero id mauris malesuada tincidunt.
+          <div className="w-1/2 px-4">
+            <div className="flex">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                {data[id - 1].title}
+              </h2>
+              {user === data[id - 1].author ? (
+                <div className="w-3/5 flex justify-end items-center">
+                  <a href={`/${id}/details/edit`}>
+                    <button className="bg-orange-500 rounded-full px-4 h-6">
+                      Edit
+                    </button>
+                  </a>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 break-words">
+              {data[id - 1].shortDesc}
             </p>
             <div className="flex mb-4">
               <div className="mr-4">
@@ -238,36 +251,21 @@ function DetailsPage() {
                 Select Size:
               </span>
               <div className="flex items-center mt-2">
-                <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                  S
-                </button>
-                <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                  M
-                </button>
-                <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                  L
-                </button>
-                <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                  XL
-                </button>
-                <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                  XXL
-                </button>
+                {Array.from(data[id - 1].params.size).map((size) => {
+                  return( 
+                  <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
+                    {size}
+                  </button>
+                  );
+                })}
               </div>
             </div>
             <div>
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Product Description:
               </span>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-                ante justo. Integer euismod libero id mauris malesuada
-                tincidunt. Vivamus commodo nulla ut lorem rhoncus aliquet. Duis
-                dapibus augue vel ipsum pretium, et venenatis sem blandit.
-                Quisque ut erat vitae nisi ultrices placerat non eget velit.
-                Integer ornare mi sed ipsum lacinia, non sagittis mauris
-                blandit. Morbi fermentum libero vel nisl suscipit, nec tincidunt
-                mi consectetur.
+              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2 break-words">
+                {data[id - 1].longDesc}
               </p>
             </div>
           </div>
@@ -307,8 +305,9 @@ function DetailsPage() {
       </div>
       <div className="flex flex-col items-center mt-5 mx-7">
         <h1 className="text-3xl mb-2 text-white">Similar products</h1>
-        <div className="inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow w-full rounded-lg">
-          <div
+        <div className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow ${similar.length>=6 ? "w-full" : "px-2"} rounded-lg`}>
+          { similar.length >=6 ? (
+            <div
             className="relative bg-gray-900 text-white w-full text-4xl flex items-center justify-center pr-2"
             style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
           >
@@ -316,10 +315,11 @@ function DetailsPage() {
             <div className="absolute ml-7 mt-12" style={{ paddingTop: "4px" }}>
               {">"}
             </div>
-          </div>
+          </div>):("")}
           {similar.map((item) => {
             return <div className="flex flex-none">{item}</div>;
           })}
+          {similar.length >=6 ? (
           <div
             className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"
             style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
@@ -329,7 +329,7 @@ function DetailsPage() {
               {"<"}
             </div>
             <div className="absolute mt-16 pb-2 rotate-180">{"c"}</div>
-          </div>
+          </div>):("")}
         </div>
       </div>
     </div>

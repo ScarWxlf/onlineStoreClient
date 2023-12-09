@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import Item from "./item";
-import data from "../db/data";
+import dataInitial from "../db/data";
 import Filter, { updateCheckeds } from "./filter";
 import coolImage from "../images/c41a0b93-4561-4fe2-93ee-62493bc9807a.jpg";
 //import { Auth } from "./isauth";
 
 function Body() {
   //console.log(Auth());
+  if (!localStorage.getItem("products")) {
+    localStorage.setItem("products", JSON.stringify(dataInitial));
+  }
+  const data = JSON.parse(localStorage.getItem("products"));
+  const user = "David";
+  localStorage.setItem("user", user);
 
   const checked = updateCheckeds();
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
   const pages = [];
-  for (let i = 1; i <= data.length / 20; i++) {
+  for (let i = 1; i <= Math.ceil(data.length / 20); i++) {
     pages.push(i);
   }
 
@@ -27,19 +33,26 @@ function Body() {
 
   const changePage = (e) => {
     localStorage.setItem("page", e.currentTarget.textContent);
-    console.log(localStorage.getItem("page")*20);
+    console.log(localStorage.getItem("page") * 20);
   };
 
-  const toProducts = localStorage.getItem("page")*20;
+  let toProducts = localStorage.getItem("page") * 20;
   const fromProducts = toProducts - 20;
-  
+  if (toProducts > data.length) {
+    toProducts = data.length;
+  }
+
   useEffect(() => {
-    document.getElementById(`page${localStorage.getItem("page")}`).classList.add("bg-gray-700");
-    
+    if (items.length > 0) {
+      document
+        .getElementById(`page${localStorage.getItem("page")}`)
+        .classList.add("bg-gray-700");
+    }
+
     let allItems = [];
     if (checked.length === 0) {
       if (search.length > 0) {
-        for (let i = 0; i < data.length; i++) {
+        for (let i = fromProducts; i < toProducts; i++) {
           if (data[i].title.toLowerCase().includes(search.toLowerCase())) {
             allItems.push(<Item id={data[i].id} />);
           }
@@ -50,36 +63,43 @@ function Body() {
         }
       }
     } else {
-      let ids = new Set();
-      for (let i = 0; i < checked.length; i++) {
-        for (let j = fromProducts; j < toProducts; j++) {
+      for (let j = fromProducts; j < toProducts; j++) {
+        let hasAllCheckedParams = true;
+        for (let i = 0; i < checked.length; i++) {
+          let paramFound = false;
           for (let k in data[j].params) {
             if (typeof data[j].params[k] === "object") {
               for (let l = 0; l < data[j].params[k].length; l++) {
                 if (data[j].params[k][l] === checked[i]) {
-                  ids.add(data[j].id);
+                  paramFound = true;
+                  break;
                 }
               }
             } else {
               if (data[j].params[k] === checked[i]) {
-                ids.add(data[j].id);
+                paramFound = true;
+                break;
               }
             }
           }
+          if (!paramFound) {
+            hasAllCheckedParams = false;
+            break;
+          }
+        }
+        if (hasAllCheckedParams) {
+          if (search.length > 0) {
+            if (data[j].title.toLowerCase().includes(search.toLowerCase())) {
+              allItems.push(<Item id={data[j].id} />);
+            }
+          } else {
+            allItems.push(<Item id={data[j].id} />);
+          }
         }
       }
-      ids.forEach((id) => {
-        if (search.length > 0) {
-          if (data[id - 1].title.toLowerCase().includes(search.toLowerCase())) {
-            allItems.push(<Item id={id} />);
-          }
-        } else {
-          allItems.push(<Item id={id} />);
-        }
-      });
     }
     setItems(allItems);
-  }, [checked, search, fromProducts, toProducts]);
+  }, [checked, search, fromProducts, toProducts, data, items]);
 
   return (
     <div className="bg-gray-950 text-white flex-grow">
@@ -99,9 +119,9 @@ function Body() {
               ante justo. Integer euismod libero id mauris malesuada tincidunt.
             </p>
             <a href="/merch-editor">
-            <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
-              Constructor
-            </button>
+              <button className="bg-gray-900 h-12 w-44 mt-5 border border-gray-300 rounded-xl text-2xl hover:bg-gray-600">
+                Constructor
+              </button>
             </a>
           </div>
         </div>
@@ -116,32 +136,40 @@ function Body() {
           <div className="bg-gray-900 container flex justify-start items-start w-40 sm:w-40 md:w-44 lg:w-48 xl:w-52 2xl:w-60">
             <Filter />
           </div>
-          <div className="mx-10">
+          <div className="mx-10 flex flex-col flex-grow ">
             <div className="container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 break-words">
               {items}
             </div>
-            <div className="flex flex-col items-center justify-center mt-1">
-              <p className="ms-4 mb-2">Pages</p>
+            {items.length > 0 ? (
+              <div className="flex flex-col items-center justify-end h-full mt-1">
+                <p className="ms-4 mb-2">Pages</p>
 
-              <nav aria-label="Page navigation example">
-                <ul class="list-style-none mb-6 flex">
-                  {pages.map((page) => {
-                    return (
-                      <li>
-                        <a
-                          class="relative block rounded px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100  dark:text-white dark:hover:bg-gray-500 dark:hover:text-white"
-                          href="/"
-                          onClick={changePage}
-                          id={`page${page}`}
-                        >
-                          {page}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-            </div>
+                <nav aria-label="Page navigation example">
+                  <ul class="list-style-none mb-6 flex">
+                    {pages.map((page) => {
+                      return (
+                        <li>
+                          <a
+                            class="relative block rounded px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100  dark:text-white dark:hover:bg-gray-500 dark:hover:text-white"
+                            href="/"
+                            onClick={changePage}
+                            id={`page${page}`}
+                          >
+                            {page}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              </div>
+            ) : (
+              <div className="w-full flex justify-center">
+                <h1 className="text-4xl text-center mt-10">
+                  No items found 😟
+                </h1>
+              </div>
+            )}
           </div>
         </div>
       </div>

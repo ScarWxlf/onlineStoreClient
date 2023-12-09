@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { useNavigate} from "react-router-dom";
-// import data from "../db/data";
-//import { Rating, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-const MerchEditor = () => {
+function EditProduct() {
+  const navigate = useNavigate();
+  let { id } = useParams();
   const data = JSON.parse(localStorage.getItem("products"));
-  
-  const [img, setImage] = useState(
-    "https://yt3.googleusercontent.com/ytc/APkrFKb_WQOhfq4ZQeTGiHzX7ROY3202bwR23zfE7-Bxnw=s900-c-k-c0x00ffffff-no-rj"
-    );
-    const navigate = useNavigate();
+  const [shortDesc, setShortDesc] = useState(data[id - 1].shortDesc);
+  const [longDesc, setLongDesc] = useState(data[id - 1].longDesc);
+  const [price, setPrice] = useState(data[id - 1].price);
+  const [title, setTitle] = useState(data[id - 1].title);
+  const [img, setImage] = useState(data[id - 1].img);
+
   const allColors = [
     "Red",
     "Yellow",
@@ -26,9 +27,53 @@ const MerchEditor = () => {
     "Orange",
     "Brown",
   ];
+
   const ChangeImage = (e) => {
     setImage(URL.createObjectURL(e.currentTarget.files[0]));
   };
+
+  useEffect(() => {
+    let inputs = document.getElementsByClassName("color");
+    if (typeof data[id - 1].params.color === "string") {
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === data[id - 1].params.color) {
+          inputs[i].checked = true;
+        }
+      }
+    } else {
+      for (let i = 0; i < inputs.length; i++) {
+        for (let j = 0; j < data[id - 1].params.color.length; j++) {
+          if (inputs[i].value === data[id - 1].params.color[j]) {
+            inputs[i].checked = true;
+          }
+        }
+      }
+    }
+
+    let sizeInputs = document.getElementsByClassName("size");
+    for (let i = 0; i < sizeInputs.length; i++) {
+      for (let j = 0; j < data[id - 1].params.size.length; j++) {
+        if (sizeInputs[i].value === data[id - 1].params.size[j]) {
+          sizeInputs[i].checked = true;
+        }
+      }
+    }
+
+    // render propertys
+    if(document.getElementById("propertys").children.length > 0) {
+        return;
+    }
+    for (let k in data[id - 1].params) {
+      if (k === "color" || k === "size" || k === "availability") continue;
+      let property = document
+        .getElementById("property_template")
+        .children[0].cloneNode(true);
+      let propertys = document.getElementById("propertys");
+      property.children[0].value = `${k}=${data[id - 1].params[k]}`;
+      property.children[1].addEventListener("click", deleteItem);
+      propertys.appendChild(property);
+    }
+  }, [data, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,53 +93,59 @@ const MerchEditor = () => {
     }
 
     const merchData = {
-      id: data.length + 1,
+      id: data[id - 1].id,
       title: e.target[1].value,
-      img: "", //`https://picsum.photos/id/${data.length+1}/1200/1200`,//URL.createObjectURL(e.target[0].files[0])
-      star: 0,
+      img: data[id - 1].img, //URL.createObjectURL(e.target[0].files[0]) ||
+      star: data[id - 1].star,
       price: parseFloat(e.target[3].value),
       params: {
         color: colors,
+        //firm: data[id - 1].params.firm,
         availability: e.target[4].value,
         size: sizes,
       },
       shortDesc: e.target[2].value,
       longDesc: e.target[24].value,
-      reviews: [
-        {
-          id: 1,
-          rating: 4,
-          comment: "Good product",
-          name: "John Doe",
-          date: "2021-09-01",
-        },
-      ],
-      author: "David",
+      reviews: data[id - 1].reviews,
+      author: data[id - 1].author,
     };
-    const propertys = document.getElementById("propertys").children;
+    const propertys = document.getElementsByClassName("property");
     for (let i = 0; i < propertys.length; i++) {
-      const property = propertys[i].value.split('=');
-      merchData.params[property[0]] = property[1];
+      if (propertys[i].value.length > 0) {
+        let property = propertys[i].value.split("=");
+        merchData.params[property[0]] = property[1];
+      }
+    }
+    //console.log(merchData);
+    if (e.target[0].files[0] === undefined) {
+      data[id - 1] = merchData;
+      localStorage.setItem("products", JSON.stringify(data));
+      navigate("/");
+      return;
     }
     const image = new FileReader();
     image.readAsDataURL(e.target[0].files[0]);
-    image.addEventListener("load",() => {
+    image.addEventListener("load", () => {
       merchData.img = image.result;
-      const newData = Array.from(JSON.parse(localStorage.getItem("products")));
-      newData.push(merchData);
-      localStorage.setItem("products", JSON.stringify(newData));
+      data[id - 1] = merchData;
+      localStorage.setItem("products", JSON.stringify(data));
       navigate("/");
-    })
+    });
+  };
+
+  const deleteItem = (e) => {
+    e.preventDefault();
+    e.currentTarget.parentElement.remove();
   };
 
   const addProperty = (e) => {
     e.preventDefault();
-    const property = document.getElementById("property_template").children[0].cloneNode(true);
+    const property = document
+      .getElementById("property_template")
+      .children[0].cloneNode(true);
     const propertys = document.getElementById("propertys");
     propertys.appendChild(property);
-    
   };
-  
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
       <form onSubmit={handleSubmit}>
@@ -104,8 +155,8 @@ const MerchEditor = () => {
               <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
                 <img
                   id="image"
-                  className="w-full h-full rounded-lg"
                   src={img}
+                  className="w-full h-full rounded-lg"
                   alt="Product"
                 />
               </div>
@@ -123,13 +174,27 @@ const MerchEditor = () => {
             </div>
             <div className="md:flex-1 px-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                Title: <input className="rounded-lg text-black" />
+                Title:{" "}
+                <input
+                  className="rounded-lg text-black"
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                />
               </h2>
               <span className="font-bold text-gray-700 dark:text-gray-300">
-                Short product description (120 symb max):
+                Short product description (max 120 symbols):
               </span>
               <div className="text-gray-600 dark:text-gray-300 text-sm mb-4 w-96">
-                <textarea maxlength="120" className="rounded-lg text-black h-20 px-1 w-full" />
+                <textarea
+                  maxlength="120"
+                  className="rounded-lg text-black h-20 px-1 w-full"
+                  value={shortDesc}
+                  onChange={(e) => {
+                    setShortDesc(e.target.value);
+                  }}
+                />
               </div>
               <div className="flex mb-4">
                 <div className="mr-4">
@@ -138,16 +203,29 @@ const MerchEditor = () => {
                   </span>
                   <span className="text-gray-600 dark:text-gray-300">
                     {" "}
-                    <input className="rounded-lg text-black w-20 px-1" />
+                    <input
+                      className="rounded-lg text-black w-20 px-1"
+                      value={price}
+                      onChange={(e) => {
+                        setPrice(e.target.value);
+                      }}
+                    />
                   </span>
                 </div>
                 <div>
                   <span className="font-bold text-gray-700 dark:text-gray-300">
-                    Availability:
+                    Availability (In Stock) (Out of Stock):
                   </span>
-                  <span className="text-black">
+                  <span className="text-gray-600 dark:text-gray-300">
                     {" "}
-                    <select className="rounded-lg">
+                    <select className="rounded-lg text-black">
+                      <option
+                        value={data[id - 1].params.availability}
+                        selected
+                        hidden
+                      >
+                        {data[id - 1].params.availability}
+                      </option>
                       <option value="In Stock">In Stock</option>
                       <option value="Out of Stock">Out of Stock</option>
                     </select>
@@ -233,10 +311,17 @@ const MerchEditor = () => {
               </div>
               <div>
                 <span className="font-bold text-gray-700 dark:text-gray-300">
-                  Long product description (370 symb max):
+                  Long product description (max 370 symbols):
                 </span>
                 <div className="text-gray-600 dark:text-gray-300 w-full text-sm mt-2">
-                  <textarea maxlength="370" className="rounded-lg text-black w-full" />
+                  <textarea
+                    maxlength="370"
+                    className="rounded-lg text-black w-full"
+                    value={longDesc}
+                    onChange={(e) => {
+                      setLongDesc(e.target.value);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -257,6 +342,7 @@ const MerchEditor = () => {
                 category=T shirt
               </div>
             </div>
+            <p className="text-white">Propertys:</p>
             <div id="propertys" className="flex gap-2 w-full"></div>
           </div>
           <button
@@ -267,14 +353,29 @@ const MerchEditor = () => {
           </button>
         </div>
       </form>
-      <template id='property_template'>
-        <input
-          className="text-center property w-32 me-1 accent-current rounded-full px-1"
-          type="text"
-        />
+      <template id="property_template">
+        <div className="relative">
+          <input
+            className="text-center property w-32 me-1 accent-current rounded-full px-1"
+            type="text"
+          />
+          <button class="absolute -top-7 right-3 text-gray-300 lg:mt-6 lg:-mr-4 hover:text-gray-600  dark:hover:text-gray-200">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="white"
+              class="w-3 h-3 bi bi-x-circle"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+        </div>
       </template>
     </div>
   );
-};
+}
 
-export default MerchEditor;
+export default EditProduct;
