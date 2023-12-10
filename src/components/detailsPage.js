@@ -31,20 +31,24 @@ function DetailsPage() {
 
   if (typeof color === "string") {
     colorButtons.push(
-      <button
-        className={`w-6 h-6 rounded-full border border-black ${
+      <label
+        className={`w-8 h-8 rounded-full input-color border border-black hover:outline-dashed hover:outline-2 hover:outline-white ${
           allColors[color.toLowerCase()]
-        } mr-2`}
-      ></button>
+        }`}
+      >
+        <input type="radio" name="color" className="color hidden" value={color}/>
+      </label>
     );
   } else {
     for (let i = 0; i < color.length; i++) {
       colorButtons.push(
-        <button
-          className={`w-6 h-6 rounded-full border border-black ${
+        <label
+          className={`w-8 h-8 rounded-full input-color border border-black hover:outline-dashed hover:outline-2 hover:outline-white ${
             allColors[color[i].toLowerCase()]
-          } mr-2`}
-        ></button>
+          }`}
+        >
+          <input type="radio" name="color" className="color hidden" value={color[i]} />
+        </label>
       );
     }
   }
@@ -59,13 +63,21 @@ function DetailsPage() {
 
   const addToCart = () => {
     let items = JSON.parse(localStorage.getItem("cart"));
+    const size = document.querySelector(".size:checked");
+    const color = document.querySelector(".color:checked");
+    const data = {
+      id: id,
+      size: size.value,
+      color: color.value,
+    };
     if (items === null) {
-      localStorage.setItem("cart", JSON.stringify(id));
+      localStorage.setItem("cart", JSON.stringify([data]));
     } else {
       if (items === "") {
-        localStorage.setItem("cart", JSON.stringify(id));
+        localStorage.setItem("cart", JSON.stringify([data]));
       } else {
-        localStorage.setItem("cart", JSON.stringify(id + " " + items));
+        items.push(data);
+        localStorage.setItem("cart", JSON.stringify(items));
       }
     }
   };
@@ -89,7 +101,7 @@ function DetailsPage() {
     });
     return similar;
   }
-  let similar = getSimilar(); 
+  let similar = getSimilar();
 
   useEffect(() => {
     const image = document.getElementById("image");
@@ -244,7 +256,7 @@ function DetailsPage() {
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Select Color:
               </span>
-              <div className="flex items-center mt-2">{colorButtons}</div>
+              <div className="flex items-center gap-1 mt-2">{colorButtons}</div>
             </div>
             <div className="mb-4">
               <span className="font-bold text-gray-700 dark:text-gray-300">
@@ -252,10 +264,17 @@ function DetailsPage() {
               </span>
               <div className="flex items-center mt-2">
                 {Array.from(data[id - 1].params.size).map((size) => {
-                  return( 
-                  <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-                    {size}
-                  </button>
+                  return (
+                    <label className="input-wrapper dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
+                      {size}
+                      <input
+                        className="size mx-1 accent-current hidden"
+                        style={{ marginTop: "3px" }}
+                        type="radio"
+                        name="size"
+                        value={size}
+                      />
+                    </label>
                   );
                 })}
               </div>
@@ -305,31 +324,47 @@ function DetailsPage() {
       </div>
       <div className="flex flex-col items-center mt-5 mx-7">
         <h1 className="text-3xl mb-2 text-white">Similar products</h1>
-        <div className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow ${similar.length>=6 ? "w-full" : "px-2"} rounded-lg`}>
-          { similar.length >=6 ? (
+        <div
+          className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow ${
+            similar.length >= 6 ? "w-full" : "px-2"
+          } rounded-lg`}
+        >
+          {similar.length >= 6 ? (
             <div
-            className="relative bg-gray-900 text-white w-full text-4xl flex items-center justify-center pr-2"
-            style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
-          >
-            {"scrcll"}
-            <div className="absolute ml-7 mt-12" style={{ paddingTop: "4px" }}>
-              {">"}
+              className="relative bg-gray-900 text-white w-full text-4xl flex items-center justify-center pr-2"
+              style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
+            >
+              {"scrcll"}
+              <div
+                className="absolute ml-7 mt-12"
+                style={{ paddingTop: "4px" }}
+              >
+                {">"}
+              </div>
             </div>
-          </div>):("")}
+          ) : (
+            ""
+          )}
           {similar.map((item) => {
             return <div className="flex flex-none">{item}</div>;
           })}
-          {similar.length >=6 ? (
-          <div
-            className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"
-            style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
-          >
-            {"scr ll"}
-            <div className="absolute mr-7 mt-12" style={{ paddingTop: "4px" }}>
-              {"<"}
+          {similar.length >= 6 ? (
+            <div
+              className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"
+              style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
+            >
+              {"scr ll"}
+              <div
+                className="absolute mr-7 mt-12"
+                style={{ paddingTop: "4px" }}
+              >
+                {"<"}
+              </div>
+              <div className="absolute mt-16 pb-2 rotate-180">{"c"}</div>
             </div>
-            <div className="absolute mt-16 pb-2 rotate-180">{"c"}</div>
-          </div>):("")}
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

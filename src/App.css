@@ -8,6 +8,12 @@
     }
   }
 
+  @layer components {
+    .input-color:has(input:checked) {
+      @apply outline-2 outline outline-white;
+    }
+  }
+
   @layer utilities {
     @variants responsive {
       /* Hide scrollbar for Chrome, Safari and Opera */

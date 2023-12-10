@@ -4,21 +4,37 @@ import React from "react";
 function Cart() {
   const data = JSON.parse(localStorage.getItem("products"))
 
-  let allItems, cartItems, Subtotal, Shipping, Total;
+  const allColors = {
+    red: "text-red-500",
+    yellow: "text-yellow-500",
+    green: "text-green-500",
+    blue: "text-blue-500",
+    indigo: "text-indigo-500",
+    purple: "text-purple-500",
+    pink: "text-pink-500",
+    gray: "text-gray-500",
+    white: "text-white",
+    black: "text-black",
+    rose: "text-rose-500",
+    violet: "text-violet-500",
+    orange: "text-orange-500",
+    brown: "text-orange-900",
+  };
+
+  let allItems, Subtotal, Shipping, Total;
   function checkCart() {
     allItems = JSON.parse(localStorage.getItem("cart"));
 
-    if (allItems === null || allItems === undefined || allItems === "") {
+    if (allItems === null || allItems === undefined || allItems.length === 0) {
       Subtotal = 0; 
       Shipping = 0;
       Total = 0;
       return;
-    }
-    cartItems = allItems.split(" ");
+    } 
 
     Subtotal = 0;
-    cartItems.forEach((item) => {
-      Subtotal += data[item - 1].price;
+    allItems.forEach((item) => {
+      Subtotal += data[item.id-1].price;
     });
     Subtotal = Subtotal.toFixed(2);
     Shipping = 10;
@@ -28,19 +44,29 @@ function Cart() {
   checkCart();
   
 
-  function redefinitionPrice(id) {
+  function redefinitionPrice(id, size, color) {
     let change = JSON.parse(localStorage.getItem("cart"));
-    change = change.split(" ");
-    let newChange = change.filter((item) => item !== id);
-    newChange = newChange.join(" ");
-    localStorage.setItem("cart", JSON.stringify(newChange));
+    let item = {
+      id: id,
+      size: size,
+      color: color,
+    };
+    change.forEach((el, index) => {
+      if (JSON.stringify(el) === JSON.stringify(item)) {
+        change.splice(index, 1);
+      }
+    });
+    localStorage.setItem("cart", JSON.stringify(change));
     window.location.reload();
   }
 
   const deleteItem = (e) => {
-    let id = e.currentTarget.parentElement.id;
+    let el = e.currentTarget.parentElement;
+    let id = el.id;
+    let size = el.querySelector(`.item-size`).textContent;
+    let color = el.querySelector(`.item-color`).textContent;
     e.currentTarget.parentElement.remove();
-    redefinitionPrice(id);
+    redefinitionPrice(id, size, color);
   };
 
   const updateQty = (e) => {
@@ -62,7 +88,7 @@ function Cart() {
             <div class="px-10">
               {allItems === null ||
               allItems === undefined ||
-              allItems === "" ? (
+              allItems.length === 0 ? (
                 <div className="flex flex-col items-center">
                   <h1 className="text-3xl">Cart is empty now -_-</h1>
                   <a href="/">
@@ -72,15 +98,15 @@ function Cart() {
                   </a>
                 </div>
               ) : (
-                cartItems.map((item) => {
+                allItems.map((item) => {
                   return (
                     <div
-                      id={data[item - 1].id}
+                      id={item.id}
                       class="relative flex flex-wrap items-center pb-8 mb-8 -mx-4 border-b border-gray-200 dark:border-gray-700 xl:justify-between border-opacity-40"
                     >
                       <div class="w-full mb-2 lg:mb-0 h-96 md:h-44 md:w-44">
                         <img
-                          src={data[item - 1].img}
+                          src={data[item.id-1].img}
                           alt=""
                           class="object-cover w-full h-full rounded-lg"
                         />
@@ -88,20 +114,20 @@ function Cart() {
                       <div class="w-full px-4 mb-6 md:w-auto xl:mb-0">
                         <a
                           class="block mb-5 text-xl font-medium  hover:underline"
-                          href="/"
+                          href={`/${item.id}/details`}
                         >
-                          {data[item - 1].title}
+                          {data[item.id-1].title}
                         </a>
                         <div class="flex flex-wrap">
                           <p class="mr-4 text-sm font-medium">
                             <span class="">Color:</span>
-                            <span class="ml-2  ">
-                              {data[item - 1].params.color}
+                            <span class={`ml-2 item-color ${allColors[(item.color).toLowerCase()]}`}>
+                              {item.color}
                             </span>
                           </p>
                           <p class="text-sm font-medium ">
                             <span>Size:</span>
-                            <span class="ml-2 ">38</span>
+                            <span class="ml-2 item-size">{item.size}</span>
                           </p>
                         </div>
                       </div>
@@ -151,7 +177,7 @@ function Cart() {
                       <div class="w-full px-4 xl:w-auto">
                         <span class="text-xl font-medium text-blue-500  ">
                           <span class="text-sm">$</span>
-                          <span>{data[item - 1].price}</span>
+                          <span>{data[item.id-1].price}</span>
                         </span>
                       </div>
                       <button
