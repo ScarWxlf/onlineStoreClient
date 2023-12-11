@@ -1374,6 +1374,11 @@ for (let i = 0; i< data.length; i++){
   data[i].longDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ante justo. Integer euismod libero id mauris malesuada tincidunt. Vivamus commodo nulla ut lorem rhoncus aliquet. Duis dapibus augue vel ipsum pretium, et venenatis sem blandit. Quisque ut erat vitae nisi ultrices placerat non eget velit. Integer ornare mi sed ipsum lacinia, non sagittis mauris blandit. Morbi fermentum libero vel nisl suscipit, nec tincidunt mi consectetur."
   data[i].params.size = ["S", "M", "L", "XL", "XXL"]
   data[i].author = "David"
+  data[i].star = 0;
+  data[i].reviews.forEach(review => {
+    data[i].star += review.rating;
+  })
+  data[i].star = data[i].star / data[i].reviews.length;
 }
 
 export default data;

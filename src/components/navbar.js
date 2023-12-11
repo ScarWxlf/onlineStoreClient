@@ -69,7 +69,7 @@ export default function NavbarDefault() {
       <Typography
         as="li"
       >
-        <Button onClick={() => setAuth(!auth)}> 
+        <Button className="!py-0" onClick={() => setAuth(!auth)}> 
           <span>Spaw rigth buttons</span>
         </Button>
       </Typography>

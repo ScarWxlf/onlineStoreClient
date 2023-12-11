@@ -8,9 +8,11 @@ function DetailsPage() {
   const data = JSON.parse(localStorage.getItem("products"));
 
   const user = localStorage.getItem("user");
-  const [rated, setRated] = React.useState(4);
   let { id } = useParams();
+  const [rated] = React.useState(data[id - 1].star);
+  const [reviewRating, setReviewRating] = React.useState(0);
   const [color] = React.useState(data[id - 1].params.color);
+  const currentDate = new Date();
   let colorButtons = [];
   const allColors = {
     red: "bg-red-500",
@@ -36,7 +38,12 @@ function DetailsPage() {
           allColors[color.toLowerCase()]
         }`}
       >
-        <input type="radio" name="color" className="color hidden" value={color}/>
+        <input
+          type="radio"
+          name="color"
+          className="color hidden"
+          value={color}
+        />
       </label>
     );
   } else {
@@ -47,7 +54,12 @@ function DetailsPage() {
             allColors[color[i].toLowerCase()]
           }`}
         >
-          <input type="radio" name="color" className="color hidden" value={color[i]} />
+          <input
+            type="radio"
+            name="color"
+            className="color hidden"
+            value={color[i]}
+          />
         </label>
       );
     }
@@ -62,6 +74,11 @@ function DetailsPage() {
   };
 
   const addToCart = () => {
+    let alert = document.getElementById("alert");
+    alert.classList.remove("opacity-0");
+    setTimeout(() => {
+      alert.classList.add("opacity-0");
+    }, 2000);
     let items = JSON.parse(localStorage.getItem("cart"));
     const size = document.querySelector(".size:checked");
     const color = document.querySelector(".color:checked");
@@ -159,11 +176,32 @@ function DetailsPage() {
     }
   }, []);
 
+  const submitReview = () => {
+    const comment = document.querySelector(".text-review");
+    const name = document.querySelector(".user-name-review");
+    const date = document.querySelector(".date-review");
+    const newreview = {
+      id: data[id - 1].reviews.length + 1,
+      rating: reviewRating,
+      comment: comment.value,
+      name: name.textContent,
+      date: date.textContent,
+    };
+    data[id - 1].reviews.push(newreview);
+    let star = 0;
+    data[id - 1].reviews.forEach((review) => {
+      star += review.rating;
+    });
+    data[id - 1].star = star / data[id - 1].reviews.length;
+    localStorage.setItem("products", JSON.stringify(data));
+    window.location.reload();
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col w-full md:flex-row -mx-4">
-          <div className="w-1/2 px-4">
+          <div className="w-1/2 px-4 relative">
             <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4 w-full">
               <div
                 id="lens"
@@ -195,6 +233,26 @@ function DetailsPage() {
                 >
                   Add to Cart
                 </button>
+              </div>
+            </div>
+            <div
+              id="alert"
+              class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md absolute left-52 bottom-20 transition-opacity ease-in duration-700 opacity-0 animate-bounce"
+              role="alert"
+            >
+              <div class="flex items-center">
+                <div class="py-1">
+                  <svg
+                    class="fill-current h-6 w-6 text-teal-500 mr-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-bold">Succes</p>
+                </div>
               </div>
             </div>
           </div>
@@ -239,17 +297,17 @@ function DetailsPage() {
               </div>
             </div>
             <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
-              {rated}.0
+              {rated}
               <Rating
                 className="flex text-yellow-400"
-                value={4}
-                onChange={(value) => setRated(value)}
+                value={parseInt(rated)}
+                readonly
               />
               <Typography
                 color="blue-gray"
                 className="font-medium text-gray-400"
               >
-                Based on 134 Reviews
+                Based on {data[id - 1].reviews.length} Reviews
               </Typography>
             </div>
             <div className="mb-4">
@@ -290,6 +348,7 @@ function DetailsPage() {
           </div>
         </div>
         <div className="flex flex-col gap-3 mt-14">
+          <h1 className="text-3xl mb-2 text-white">Reviews</h1>
           {Array.from(data[id - 1].reviews).map((review) => {
             return (
               <div className="flex flex-col gap-4 bg-gray-700 p-4 rounded-lg text-white">
@@ -320,6 +379,47 @@ function DetailsPage() {
               </div>
             );
           })}
+          <div className="flex flex-col">
+            <h1 className="text-3xl mb-2 text-white">Leave a review</h1>
+            <div className="flex flex-col bg-gray-700 p-4 rounded-lg text-white">
+              <div className="flex justify justify-between">
+                <div className="flex gap-2">
+                  <div className="w-7 h-7 text-center rounded-full bg-green-700">
+                    {localStorage.getItem("user")[0]}
+                  </div>
+                  <span className="user-name-review">
+                    {localStorage.getItem("user")}
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                  <Rating
+                    className="flex text-yellow-400 star-review"
+                    value={reviewRating}
+                    onChange={(value) => {
+                      setReviewRating(value);
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="h-24 mb-5">
+                <textarea
+                  className="text-review resize-none text-black px-1 rounded-xl bg-gray-300 h-full w-full"
+                  maxLength={400}
+                ></textarea>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="date-review">{`${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}`}</span>
+                <button
+                  className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg"
+                  onClick={submitReview}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center mt-5 mx-7">

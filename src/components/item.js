@@ -49,7 +49,7 @@ function Item({ id }) {
             <Button
               ripple={false}
               fullWidth={true}
-              className="bg-gray-700 w-2/5 flex my-2 items-center justify-center opacity-75 hover:opacity-100 text-white shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+              className="!py-0 bg-gray-700 w-2/5 flex my-2 items-center justify-center opacity-75 hover:opacity-100 text-white shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
             >
               Details
             </Button>
