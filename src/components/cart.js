@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import MyModal from "./modal";
 //import data from "../db/data";
 
 function Cart() {
   const data = JSON.parse(localStorage.getItem("products"))
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const allColors = {
     red: "text-red-500",
@@ -204,23 +206,6 @@ function Cart() {
           </div>
           <div class="w-full lg:w-4/12">
             <div class="px-6 mb-14">
-              <div class="mb-10">
-                <span class="mb-6 text-3xl font-bold text-gray-700 ">
-                  Apply Coupon
-                </span>
-                <input
-                  type="text"
-                  class="flex-1 w-full px-8 py-4 mt-4 font-normal placeholder-gray-400 border dark:bg-gray-800 rounded-xl dark:border-gray-700 dark:placeholder-gray-500 md:flex-none md:mr-6 "
-                  placeholder="x304k45"
-                  required=""
-                />
-                <a
-                  class="inline-block w-full px-6 py-4 mt-4 text-lg font-medium leading-6 tracking-tighter text-center text-white bg-blue-500 lg:w-auto hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                  href="/"
-                >
-                  Apply
-                </a>
-              </div>
               <div>
                 <h2 class="mb-6 text-3xl font-bold ">Cart totals</h2>
                 <div class="flex items-center justify-between px-10 py-4 mb-3 font-medium leading-8 bg-gray-100 bg-opacity-50 border  dark:bg-gray-800 dark:border-gray-800 rounded-xl">
@@ -244,12 +229,13 @@ function Cart() {
                     <span>{Total}</span>
                   </span>
                 </div>
-                <a
+                <MyModal open={isModalOpen} setOpen={setIsModalOpen} total={Total}/>
+                <button
+                  onClick={() => setIsModalOpen(true)}
                   class="inline-block w-full px-6 py-4 text-lg font-medium leading-6 tracking-tighter text-center text-white bg-blue-500 lg:w-auto hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                  href="/"
                 >
                   Checkout
-                </a>
+                </button>
               </div>
             </div>
           </div>

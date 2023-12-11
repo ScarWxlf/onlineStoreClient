@@ -12,8 +12,19 @@ function Body() {
     localStorage.setItem("products", JSON.stringify(dataInitial));
   }
   const data = JSON.parse(localStorage.getItem("products"));
+  
   const user = "David";
   localStorage.setItem("user", user);
+
+  if (!localStorage.getItem("profile")) {
+    const profile = {
+      img: "https://mdbcdn.b-cdn.net/img/new/avatars/1.webp",
+      username: "David",
+      email: "example@gmail.com",
+      number: "+381234567890",
+    };
+    localStorage.setItem("profile", JSON.stringify(profile));
+  }
 
   const checked = updateCheckeds();
   const [items, setItems] = useState([]);

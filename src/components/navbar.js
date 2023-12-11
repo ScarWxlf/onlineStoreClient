@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Navbar,
   MobileNav,
@@ -11,7 +11,7 @@ import { Outlet } from "react-router-dom";
 
 export default function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
-  const [auth, setAuth] = useState(false);
+  // const [auth, setAuth] = useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -66,13 +66,13 @@ export default function NavbarDefault() {
           Cart
         </a>
       </Typography>
-      <Typography
+      {/* <Typography
         as="li"
       >
         <Button className="!py-0" onClick={() => setAuth(!auth)}> 
           <span>Spaw rigth buttons</span>
         </Button>
-      </Typography>
+      </Typography> */}
     </ul>
   );
 
@@ -83,17 +83,17 @@ export default function NavbarDefault() {
           <Typography
             as="a"
             href="/"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
+            className="mr-4 cursor-pointer py-1.5 font-medium px-10"
           >
             ClothStore
           </Typography>
           <div className="hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">
-          {auth ? (
+          {/* {auth ? (
             <Button>
               <span>Profile</span>
             </Button>
-          ):(
+          ):( */}
             <>
           <Button
                 variant="gradient"
@@ -122,7 +122,7 @@ export default function NavbarDefault() {
               </Button>
             </a>
             </>
-          )}
+          {/* )} */}
           </div>
           <IconButton
             variant="text"

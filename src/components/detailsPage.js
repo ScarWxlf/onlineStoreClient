@@ -7,7 +7,7 @@ import Item from "./item";
 function DetailsPage() {
   const data = JSON.parse(localStorage.getItem("products"));
 
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("profile")).username;
   let { id } = useParams();
   const [rated] = React.useState(data[id - 1].star);
   const [reviewRating, setReviewRating] = React.useState(0);
@@ -74,14 +74,23 @@ function DetailsPage() {
   };
 
   const addToCart = () => {
-    let alert = document.getElementById("alert");
+    const size = document.querySelector(".size:checked");
+    const color = document.querySelector(".color:checked");
+    if (size === null || color === null) {
+      let alert = document.getElementById("error-alert");
+      alert.classList.remove("opacity-0");
+      setTimeout(() => {
+        alert.classList.add("opacity-0");
+      }, 2000);
+      return;
+    }
+
+    let alert = document.getElementById("succes-alert");
     alert.classList.remove("opacity-0");
     setTimeout(() => {
       alert.classList.add("opacity-0");
     }, 2000);
     let items = JSON.parse(localStorage.getItem("cart"));
-    const size = document.querySelector(".size:checked");
-    const color = document.querySelector(".color:checked");
     const data = {
       id: id,
       size: size.value,
@@ -124,10 +133,8 @@ function DetailsPage() {
     const image = document.getElementById("image");
     const result = document.getElementById("result");
     const lens = document.getElementById("lens");
-    // let zoom = 3;
 
     result.style.backgroundImage = `url(${image.src})`;
-    // let bw=3;
     let cx = result.offsetWidth / lens.offsetWidth;
     let cy = result.offsetHeight / lens.offsetHeight;
     //240 180 1.875
@@ -140,6 +147,7 @@ function DetailsPage() {
     /*and also for touch screens:*/
     result.addEventListener("touchmove", moveLens);
     image.addEventListener("touchmove", moveLens);
+    lens.addEventListener("touchmove", moveLens);
 
     function moveLens(e) {
       let pos, x, y;
@@ -236,7 +244,7 @@ function DetailsPage() {
               </div>
             </div>
             <div
-              id="alert"
+              id="succes-alert"
               class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md absolute left-52 bottom-20 transition-opacity ease-in duration-700 opacity-0 animate-bounce"
               role="alert"
             >
@@ -253,6 +261,14 @@ function DetailsPage() {
                 <div>
                   <p class="font-bold">Succes</p>
                 </div>
+              </div>
+            </div>
+            <div id="error-alert" role="alert" className="absolute left-32 bottom-20 transition-opacity ease-in duration-700 opacity-0 animate-bounce">
+              <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+                Error
+              </div>
+              <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
+                <p>You haven't chosen a color or size.</p>
               </div>
             </div>
           </div>
@@ -385,11 +401,9 @@ function DetailsPage() {
               <div className="flex justify justify-between">
                 <div className="flex gap-2">
                   <div className="w-7 h-7 text-center rounded-full bg-green-700">
-                    {localStorage.getItem("user")[0]}
+                    {user[0]}
                   </div>
-                  <span className="user-name-review">
-                    {localStorage.getItem("user")}
-                  </span>
+                  <span className="user-name-review">{user}</span>
                 </div>
                 <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
                   <Rating
@@ -437,7 +451,7 @@ function DetailsPage() {
               {"scrcll"}
               <div
                 className="absolute ml-7 mt-12"
-                style={{ paddingTop: "4px" }}
+                style={{ paddingTop: "3px" }}
               >
                 {">"}
               </div>
@@ -456,7 +470,7 @@ function DetailsPage() {
               {"scr ll"}
               <div
                 className="absolute mr-7 mt-12"
-                style={{ paddingTop: "4px" }}
+                style={{ paddingTop: "3px" }}
               >
                 {"<"}
               </div>
