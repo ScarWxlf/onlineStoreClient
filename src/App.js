@@ -11,6 +11,7 @@ import DetailsPage from "./components/detailsPage";
 import Cart from "./components/cart";
 import MerchEditor from "./components/merchEditor";
 import EditProduct from "./components/editProduct";
+import OrderHistory from "./components/orderHistory";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path=":id/details/edit" element={<EditProduct/>}/>
           <Route path="cart" element={<Cart />} />
           <Route path="merch-editor" element={<MerchEditor />} />
+          <Route path="order-history" element={<OrderHistory />} />
         </Route>
       </Routes>
     </div>

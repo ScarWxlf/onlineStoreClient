@@ -37,7 +37,10 @@ function ProfileElem() {
           class="w-32 h-32 rounded-full shadow-lg object-cover"
           alt="Avatar"
         />
-        <h1 className=" mt-3 mb-1 text-3xl">Profile info</h1>
+        <a href="order-history">
+        <button className="h-8 w-32 bg-green-600 rounded-full hover:bg-green-500">Order history</button>
+        </a>
+        <h1 className="mb-1 text-3xl">Profile info</h1>
         <form className="flex flex-col items-center gap-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 text-lg me-20">
             <div className="flex flex-col gap-4 items-end mr-3">
@@ -80,7 +83,7 @@ function ProfileElem() {
             </div>
           </div>
           <button
-            className="border w-1/3 border-gray-500 rounded-lg py-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
+            className="border w-1/3 border-gray-500 bg-blue-800 rounded-lg py-1 duration-300 hover:bg-blue-700 hover:text-white hover:outline-2"
             type="submit"
           >
             Save changes

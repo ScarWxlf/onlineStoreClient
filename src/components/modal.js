@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 
 export default function MyModal({ open, setOpen, total }) {
   const cancelButtonRef = useRef(null);
+  const [paypalorcard, setPaypalorcard] = useState(false);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,8 +18,11 @@ export default function MyModal({ open, setOpen, total }) {
   const [expired, setExpired] = useState({ month: "", year: "" });
   const [securityCode, setSecurityCode] = useState("");
 
+  const [paypalEmail, setPaypalEmail] = useState("");
+
   const years = [];
-  const date = new Date().getFullYear();
+  const currentDate = new Date();
+  const date = currentDate.getFullYear();
   for (let i = 0; i < 8; i++) {
     years.push(date + i);
   }
@@ -27,25 +31,44 @@ export default function MyModal({ open, setOpen, total }) {
     e.preventDefault();
     const deliveryData = JSON.parse(localStorage.getItem("cart"));
     const addressData = {
-        fullName: fullName,
-        email: email,
-        address: address,
-        city: city,
-        country: country,
-        state: state,
-        zipcode: zipcode,
+      fullName: fullName,
+      email: email,
+      address: address,
+      city: city,
+      country: country,
+      state: state,
+      zipcode: zipcode,
+    };
+    // const cardData = {
+    //   cardholder: cardholder,
+    //   cardNumber: cardNumber,
+    //   expired: expired,
+    //   securityCode: securityCode,
+    // };
+    const paymentData = () =>{
+      if(paypalorcard === true){
+        return {
+          paypalEmail: paypalEmail
+        }
+      }else{
+        return {
+          cardholder: cardholder,
+          cardNumber: cardNumber,
+          expired: expired,
+          securityCode: securityCode,
+        }
+      }
     }
-    const cardData = {
-        cardholder: cardholder,
-        cardNumber: cardNumber,
-        expired: expired,
-        securityCode: securityCode,
-    }
+    const cardData = paymentData();
     console.log(addressData);
     console.log(cardData);
-    console.log(deliveryData)
-    console.log(total)
-  }
+    console.log(deliveryData);
+  
+    const orderDate = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`;
+    const user = JSON.parse(localStorage.getItem("profile"));
+    localStorage.setItem("order", JSON.stringify({user:user.username, deliveryData:deliveryData, totalprice:total, date:orderDate}));
+    console.log(total);
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -152,32 +175,32 @@ export default function MyModal({ open, setOpen, total }) {
 
                               <div class="md:col-span-2">
                                 <label for="country">Country / region</label>
-                            
-                                  <input
-                                    name="country"
-                                    id="country"
-                                    placeholder="Country"
-                                    class="h-10 border mt-1 placeholder-white rounded px-4 w-full bg-gray-600 focus:ring focus:outline-none"
-                                    value={country}
-                                    onChange={(e) => {
-                                      setCountry(e.target.value);
-                                    }}
-                                  />
+
+                                <input
+                                  name="country"
+                                  id="country"
+                                  placeholder="Country"
+                                  class="h-10 border mt-1 placeholder-white rounded px-4 w-full bg-gray-600 focus:ring focus:outline-none"
+                                  value={country}
+                                  onChange={(e) => {
+                                    setCountry(e.target.value);
+                                  }}
+                                />
                               </div>
 
                               <div class="md:col-span-2">
                                 <label for="state">State / province</label>
-                             
-                                  <input
-                                    name="state"
-                                    id="state"
-                                    placeholder="State"
-                                    class="h-10 border mt-1 placeholder-white rounded px-4 w-full bg-gray-600 focus:ring focus:outline-none"
-                                    value={state}
-                                    onChange={(e) => {
-                                      setState(e.target.value);
-                                    }}
-                                  />
+
+                                <input
+                                  name="state"
+                                  id="state"
+                                  placeholder="State"
+                                  class="h-10 border mt-1 placeholder-white rounded px-4 w-full bg-gray-600 focus:ring focus:outline-none"
+                                  value={state}
+                                  onChange={(e) => {
+                                    setState(e.target.value);
+                                  }}
+                                />
                               </div>
 
                               <div class="md:col-span-1">
@@ -197,135 +220,190 @@ export default function MyModal({ open, setOpen, total }) {
                             </div>
 
                             <div className="w-full sm:w-auto mx-auto rounded-xl bg-gray-700">
-                              <div className="mt-4 p-4">
-                                <h1 className="text-xl font-semibold text-white text-center">
-                                  Card payment
-                                </h1>
-                                <div className="">
-                                  <div className="my-3">
-                                    <input
-                                      type="text"
-                                      className="block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
-                                      placeholder="Card holder"
-                                      maxLength="22"
-                                      value={cardholder}
-                                      onChange={(e) =>
-                                        setCardholder(e.target.value)
-                                      }
-                                    />
-                                  </div>
-                                  <div className="my-3">
-                                    <input
-                                      type="text"
-                                      className="block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
-                                      placeholder="Card number"
-                                      value={cardNumber}
-                                      onChange={(e) =>
-                                        setCardNumber(e.target.value)
-                                      }
-                                      maxLength="19"
-                                    />
-                                  </div>
-                                  <div className="my-3 flex flex-col">
-                                    <div className="mb-2">
-                                      <label
-                                        htmlFor=""
-                                        className="text-white"
-                                      >
-                                        Expired
-                                      </label>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                      <select
-                                        name=""
-                                        id=""
-                                        className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
-                                        value={expired.month}
-                                        onChange={(e) =>
-                                          setExpired({
-                                            ...expired,
-                                            month: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          MM
-                                        </option>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                      </select>
-                                      <select
-                                        name=""
-                                        id=""
-                                        className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
-                                        value={expired.year}
-                                        onChange={(e) =>
-                                          setExpired({
-                                            ...expired,
-                                            year: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          YY
-                                        </option>
-                                        {years.map((year) => {
-                                          return (
-                                            <option value={year}>{year}</option>
-                                          );
-                                        })}
-                                      </select>
+                              {paypalorcard === false ? (
+                                <div className="p-4">
+                                  <h1 className="text-2xl font-semibold text-white text-center">
+                                    Card payment
+                                  </h1>
+                                  <button
+                                    className="rounded-md h-7 w-24 bg-blue-600 mt-2 hover:bg-blue-500"
+                                    onClick={() =>
+                                      setPaypalorcard(!paypalorcard)
+                                    }
+                                  >
+                                    Card/PayPal
+                                  </button>
+                                  <div className="">
+                                    <div className="my-3">
                                       <input
                                         type="text"
-                                        className="block w-full col-span-2 px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
-                                        placeholder="Security code"
-                                        maxLength="3"
-                                        value={securityCode}
+                                        className="block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                        placeholder="Card holder"
+                                        maxLength="22"
+                                        value={cardholder}
                                         onChange={(e) =>
-                                          setSecurityCode(e.target.value)
+                                          setCardholder(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="my-3">
+                                      <input
+                                        type="text"
+                                        className="block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                        placeholder="Card number"
+                                        value={cardNumber}
+                                        onChange={(e) =>
+                                          setCardNumber(e.target.value)
+                                        }
+                                        maxLength="19"
+                                      />
+                                    </div>
+                                    <div className="my-3 flex flex-col">
+                                      <div className="mb-2">
+                                        <label
+                                          htmlFor=""
+                                          className="text-white"
+                                        >
+                                          Expired
+                                        </label>
+                                      </div>
+                                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                        <select
+                                          name=""
+                                          id=""
+                                          className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                          value={expired.month}
+                                          onChange={(e) =>
+                                            setExpired({
+                                              ...expired,
+                                              month: e.target.value,
+                                            })
+                                          }
+                                        >
+                                          <option value="" selected disabled>
+                                            MM
+                                          </option>
+                                          <option value="01">01</option>
+                                          <option value="02">02</option>
+                                          <option value="03">03</option>
+                                          <option value="04">04</option>
+                                          <option value="05">05</option>
+                                          <option value="06">06</option>
+                                          <option value="07">07</option>
+                                          <option value="08">08</option>
+                                          <option value="09">09</option>
+                                          <option value="10">10</option>
+                                          <option value="11">11</option>
+                                          <option value="12">12</option>
+                                        </select>
+                                        <select
+                                          name=""
+                                          id=""
+                                          className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                          value={expired.year}
+                                          onChange={(e) =>
+                                            setExpired({
+                                              ...expired,
+                                              year: e.target.value,
+                                            })
+                                          }
+                                        >
+                                          <option value="" selected disabled>
+                                            YY
+                                          </option>
+                                          {years.map((year) => {
+                                            return (
+                                              <option value={year}>
+                                                {year}
+                                              </option>
+                                            );
+                                          })}
+                                        </select>
+                                        <input
+                                          type="text"
+                                          className="block w-full col-span-2 px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                          placeholder="Security code"
+                                          maxLength="3"
+                                          value={securityCode}
+                                          onChange={(e) =>
+                                            setSecurityCode(e.target.value)
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col justify-center items-center mt-5">
+                                    <ul className="flex">
+                                      <li className="mx-2">
+                                        <img
+                                          className="w-16"
+                                          src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/computop.png"
+                                          alt=""
+                                        />
+                                      </li>
+                                      <li className="mx-2">
+                                        <img
+                                          className="w-14"
+                                          src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/verified-by-visa.png"
+                                          alt=""
+                                        />
+                                      </li>
+                                      <li className="ml-5">
+                                        <img
+                                          className="w-7"
+                                          src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/mastercard-id-check.png"
+                                          alt=""
+                                        />
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="p-4">
+                                  <h1 className="text-2xl font-semibold text-white text-center">
+                                    Paypal payment
+                                  </h1>
+                                  <button
+                                    className="rounded-md h-7 w-24 bg-blue-600 mt-2 hover:bg-blue-500"
+                                    onClick={() =>
+                                      setPaypalorcard(!paypalorcard)
+                                    }
+                                  >
+                                    Card/PayPal
+                                  </button>
+                                  <div className="">
+                                    <div className="my-3">
+                                      <input
+                                        type="text"
+                                        className="block w-full px-5 py-2 border rounded-lg bg-gray-600 shadow-lg placeholder-white text-white focus:ring focus:outline-none"
+                                        placeholder="Paypal email"
+                                        maxLength="22"
+                                        value={paypalEmail}
+                                        onChange={(e) =>
+                                          setPaypalEmail(e.target.value)
                                         }
                                       />
                                     </div>
                                   </div>
+                                  <div className="w-full flex justify-center">
+                                    <div className="flex justify-center items-center w-2/5 bg-yellow-400 rounded-lg">
+                                      <img
+                                        width="30"
+                                        class="my-1 me-1"
+                                        src="https://www.paypalobjects.com/images/shared/momgram@2x.png"
+                                      />
+                                      <h1 className="text-3xl font-bold text-blue-900">
+                                        Pay
+                                      </h1>
+                                      <h1 className="text-3xl font-bold text-blue-500">
+                                        Pal
+                                      </h1>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="flex flex-col justify-center items-center">
-                                <ul className="flex">
-                                  <li className="mx-2">
-                                    <img
-                                      className="w-16"
-                                      src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/computop.png"
-                                      alt=""
-                                    />
-                                  </li>
-                                  <li className="mx-2">
-                                    <img
-                                      className="w-14"
-                                      src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/verified-by-visa.png"
-                                      alt=""
-                                    />
-                                  </li>
-                                  <li className="ml-5">
-                                    <img
-                                      className="w-7"
-                                      src="https://www.computop-paygate.com/Templates/imagesaboutYou_desktop/images/mastercard-id-check.png"
-                                      alt=""
-                                    />
-                                  </li>
-                                </ul>
-                              </div>
+                              )}
                               <div class="md:col-span-5 text-right">
-                                <div class="inline-flex gap-2 mt-4 items-end">
+                                <div class="inline-flex gap-2 mt-2 items-end">
                                   <button
                                     type="button"
                                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
@@ -334,9 +412,9 @@ export default function MyModal({ open, setOpen, total }) {
                                   >
                                     Cancel
                                   </button>
-                                  <button 
-                                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                  onClick={handleSubmit}
+                                  <button
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={handleSubmit}
                                   >
                                     Submit
                                   </button>
