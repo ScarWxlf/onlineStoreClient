@@ -391,6 +391,7 @@ export default function MyModal({ open, setOpen, total }) {
                                         width="30"
                                         class="my-1 me-1"
                                         src="https://www.paypalobjects.com/images/shared/momgram@2x.png"
+                                        alt="paypal logo"
                                       />
                                       <h1 className="text-3xl font-bold text-blue-900">
                                         Pay
