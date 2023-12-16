@@ -38,7 +38,7 @@ function ProfileElem() {
           alt="Avatar"
         />
         <a href="order-history">
-        <button className="h-8 w-32 bg-green-600 rounded-full hover:bg-green-500">Order history</button>
+        <button className="h-8 w-32 bg-blue-800 rounded-full hover:bg-blue-700">Order history</button>
         </a>
         <h1 className="mb-1 text-3xl">Profile info</h1>
         <form className="flex flex-col items-center gap-4" onSubmit={handleSubmit}>

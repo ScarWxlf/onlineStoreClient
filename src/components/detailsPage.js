@@ -78,18 +78,31 @@ function DetailsPage() {
     const color = document.querySelector(".color:checked");
     if (size === null || color === null) {
       let alert = document.getElementById("error-alert");
-      alert.classList.remove("opacity-0");
+      alert.classList.remove("hidden");
+      setTimeout(() => {
+        alert.classList.remove("opacity-0");
+      }, 100);
       setTimeout(() => {
         alert.classList.add("opacity-0");
+        setTimeout(() => {
+          alert.classList.add("hidden");
+        }, 700);
       }, 2000);
       return;
     }
 
     let alert = document.getElementById("succes-alert");
-    alert.classList.remove("opacity-0");
+    alert.classList.remove("hidden");
+    setTimeout(() => {
+      alert.classList.remove("opacity-0");
+    }, 100);
     setTimeout(() => {
       alert.classList.add("opacity-0");
+      setTimeout(() => {
+        alert.classList.add("hidden");
+      }, 700);
     }, 2000);
+
     let items = JSON.parse(localStorage.getItem("cart"));
     const data = {
       id: id,
@@ -236,7 +249,7 @@ function DetailsPage() {
             <div className="flex -mx-2 mb-4 justify-center">
               <div className="w-1/2 px-2">
                 <button
-                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-500 dark:hover:bg-gray-500"
                   onClick={addToCart}
                 >
                   Add to Cart
@@ -245,7 +258,7 @@ function DetailsPage() {
             </div>
             <div
               id="succes-alert"
-              class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md absolute left-52 bottom-20 transition-opacity ease-in duration-700 opacity-0 animate-bounce"
+              class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md absolute left-52 bottom-20 transition-opacity ease-in duration-700 opacity-0 hidden animate-bounce"
               role="alert"
             >
               <div class="flex items-center">
@@ -263,7 +276,11 @@ function DetailsPage() {
                 </div>
               </div>
             </div>
-            <div id="error-alert" role="alert" className="absolute left-32 bottom-20 transition-opacity ease-in duration-700 opacity-0 animate-bounce">
+            <div
+              id="error-alert"
+              role="alert"
+              className="absolute left-32 bottom-20 transition-opacity ease-in duration-700 opacity-0 hidden animate-bounce"
+            >
               <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
                 Error
               </div>
@@ -339,7 +356,7 @@ function DetailsPage() {
               <div className="flex items-center mt-2">
                 {Array.from(data[id - 1].params.size).map((size) => {
                   return (
-                    <label className="input-wrapper dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
+                    <label className="input-wrapper dark:bg-gray-600 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-500">
                       {size}
                       <input
                         className="size mx-1 accent-current hidden"
@@ -364,37 +381,43 @@ function DetailsPage() {
           </div>
         </div>
         <div className="flex flex-col gap-3 mt-14">
-          <h1 className="text-3xl mb-2 text-white">Reviews</h1>
-          {Array.from(data[id - 1].reviews).map((review) => {
-            return (
-              <div className="flex flex-col gap-4 bg-gray-700 p-4 rounded-lg text-white">
-                <div className="flex justify justify-between">
-                  <div className="flex gap-2">
-                    <div className="w-7 h-7 text-center rounded-full bg-green-700">
-                      {review.name[0]}
+          <h1 className="text-3xl text-white">Reviews</h1>
+          {data[id - 1].reviews.length > 0 ? (
+            Array.from(data[id - 1].reviews).map((review) => {
+              return (
+                <div className="flex flex-col gap-4 bg-gray-700 p-4 rounded-lg text-white">
+                  <div className="flex justify justify-between">
+                    <div className="flex gap-2">
+                      <div className="w-7 h-7 text-center rounded-full bg-green-700">
+                        {review.name[0]}
+                      </div>
+                      <span>{review.name}</span>
                     </div>
-                    <span>{review.name}</span>
+                    <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                      <Rating
+                        className="flex text-yellow-400"
+                        value={review.rating}
+                        readonly
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
-                    <Rating
-                      className="flex text-yellow-400"
-                      value={review.rating}
-                      readonly
-                    />
+
+                  <div>{review.comment}</div>
+
+                  <div className="flex justify-between">
+                    <span>{review.date}</span>
+                    <button className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg">
+                      Share
+                    </button>
                   </div>
                 </div>
-
-                <div>{review.comment}</div>
-
-                <div className="flex justify-between">
-                  <span>{review.date}</span>
-                  <button className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg">
-                    Share
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="w-full flex justify-center">
+              <p className="text-2xl text-white">No reviews yet</p>
+            </div>
+          )}
           <div className="flex flex-col">
             <h1 className="text-3xl mb-2 text-white">Leave a review</h1>
             <div className="flex flex-col bg-gray-700 p-4 rounded-lg text-white">
@@ -439,7 +462,7 @@ function DetailsPage() {
       <div className="flex flex-col items-center mt-5 mx-7">
         <h1 className="text-3xl mb-2 text-white">Similar products</h1>
         <div
-          className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 bg-gray-600 flex-grow ${
+          className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 ${similar.length === 0 ? "" : "bg-gray-600"} flex-grow ${
             similar.length >= 6 ? "w-full" : "px-2"
           } rounded-lg`}
         >
@@ -459,9 +482,15 @@ function DetailsPage() {
           ) : (
             ""
           )}
-          {similar.map((item) => {
-            return <div className="flex flex-none">{item}</div>;
-          })}
+          {similar.length === 0 ? (
+            <div className="flex justify-center w-64 h-14 items-center">
+              <p className="text-white text-2xl">No similar products yet</p>
+            </div>
+          ) : (
+            similar.map((item) => {
+              return <div className="flex flex-none">{item}</div>;
+            })
+          )}
           {similar.length >= 6 ? (
             <div
               className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"

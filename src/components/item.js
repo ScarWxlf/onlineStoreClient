@@ -37,7 +37,7 @@ function Item({ id }) {
           <Typography
             variant="small"
             color="white"
-            className="font-normal opacity-75 break-all mx-3"
+            className="font-normal break-all mx-3"
           >
             {data[id - 1].shortDesc.length > 100
               ? data[id - 1].shortDesc.substring(0, 100) + "..."
@@ -45,11 +45,11 @@ function Item({ id }) {
           </Typography>
         </CardBody>
         <CardFooter className="pt-1 flex justify-center items-center">
-          <a className="flex flex-auto justify-center" href={`/${id}/details`}>
+          <a className="flex flex-auto justify-center text-white" href={`/${id}/details`}>
             <Button
               ripple={false}
               fullWidth={true}
-              className="!py-0 bg-gray-700 w-2/5 flex my-2 items-center justify-center opacity-75 hover:opacity-100 text-white shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+              className="!py-0 text-white bg-sky-950 w-2/5 flex my-2 items-center justify-center hover:bg-sky-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
             >
               Details
             </Button>

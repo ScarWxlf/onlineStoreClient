@@ -72,7 +72,7 @@ function Filter() {
       {Object.keys(categories).map((category) => {
           return (
             <div className="w-full rounded-b-lg">
-              <div className="bg-gray-900 rounded-sm w-full flex flex-col items-center">
+              <div className="bg-gray-950 rounded-sm w-full flex flex-col items-center">
                 <div className="flex justify-center w-full pt-2">
                   <button
                     className="flex relative items-center justify-start gap-1 w-11/12 bg-sky-950 rounded-t-2xl hover:bg-sky-800"

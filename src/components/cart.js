@@ -82,7 +82,7 @@ function Cart() {
     }
   };
   return (
-    <div class="flex flex-grow items-center bg-gray-50 font-poppins dark:text-white dark:bg-gray-700 ">
+    <div class="flex flex-grow bg-gray-50 font-poppins dark:text-white dark:bg-gray-700 ">
       <div class="justify-center flex-1 px-1 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
         <h2 class="mb-10 text-4xl font-bold text-center ">Your Cart</h2>
         <div class="flex flex-wrap">
@@ -232,7 +232,7 @@ function Cart() {
                 <MyModal open={isModalOpen} setOpen={setIsModalOpen} total={Total}/>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  class="inline-block w-full px-6 py-4 text-lg font-medium leading-6 tracking-tighter text-center text-white bg-blue-500 lg:w-auto hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                  class="inline-block w-full px-6 py-4 text-lg font-medium leading-6 tracking-tighter text-center text-white bg-blue-800 lg:w-auto hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   Checkout
                 </button>

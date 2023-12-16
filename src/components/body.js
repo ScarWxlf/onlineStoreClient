@@ -12,9 +12,6 @@ function Body() {
     localStorage.setItem("products", JSON.stringify(dataInitial));
   }
   const data = JSON.parse(localStorage.getItem("products"));
-  
-  const user = "David";
-  localStorage.setItem("user", user);
 
   if (!localStorage.getItem("profile")) {
     const profile = {
@@ -144,7 +141,7 @@ function Body() {
           />
         </div>
         <div className="flex h-full">
-          <div className="bg-gray-900 container flex justify-start items-start w-40 sm:w-40 md:w-44 lg:w-48 xl:w-52 2xl:w-60">
+          <div className="bg-gray-950 container flex justify-start items-start w-40 sm:w-40 md:w-44 lg:w-48 xl:w-52 2xl:w-60">
             <Filter />
           </div>
           <div className="mx-10 flex flex-col flex-grow ">

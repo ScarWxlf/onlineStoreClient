@@ -47,6 +47,8 @@ const MerchEditor = () => {
       }
     }
 
+    const userName = JSON.parse(localStorage.getItem("profile")).username;
+
     const merchData = {
       id: data.length + 1,
       title: e.target[1].value,
@@ -60,16 +62,8 @@ const MerchEditor = () => {
       },
       shortDesc: e.target[2].value,
       longDesc: e.target[24].value,
-      reviews: [
-        {
-          id: 1,
-          rating: 4,
-          comment: "Good product",
-          name: "John Doe",
-          date: "2021-09-01",
-        },
-      ],
-      author: "David",
+      reviews: [],
+      author: userName,
     };
     const propertys = document.getElementById("propertys").children;
     for (let i = 0; i < propertys.length; i++) {
