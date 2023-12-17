@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
   Navbar,
   MobileNav,
@@ -7,19 +7,11 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Outlet } from "react-router-dom";
-import {Auth} from "./isauth";
 //import { LogOut } from "./log-out";
 
 export default function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
-  const [auth, setAuth] = useState(false);
-  const [loadind, setLoading] = useState(true);
-
-  useEffect(() => {
-    const res = Auth();
-    setAuth(res.isAuthenticated);
-    setLoading(false);
-  }, []);
+  // const [auth, setAuth] = useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -74,9 +66,15 @@ export default function NavbarDefault() {
           Cart
         </a>
       </Typography>
+      {/* <Typography
+        as="li"
+      >
+        <Button className="!py-0" onClick={() => setAuth(!auth)}> 
+          <span>Spaw rigth buttons</span>
+        </Button>
+      </Typography> */}
     </ul>
   );
-
 
   return (
     <>
@@ -89,11 +87,14 @@ export default function NavbarDefault() {
           >
             ClothStore
           </Typography>
-          {loadind ? ("") : 
-          
-          auth ? (<div className="hidden lg:block">{navList}</div>
-          ):(
-            <div className="flex items-center gap-x-1">
+          <div className="hidden lg:block">{navList}</div>
+          <div className="flex items-center gap-x-1">
+          {/* {auth ? (
+            <Button>
+              <span>Profile</span>
+            </Button>
+          ):( */}
+            <>
           <Button
                 variant="gradient"
                 size="sm"
@@ -120,8 +121,9 @@ export default function NavbarDefault() {
                 <span>Sign in</span>
               </Button>
             </a>
+            </>
+          {/* )} */}
           </div>
-          )}
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"

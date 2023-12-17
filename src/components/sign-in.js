@@ -27,7 +27,7 @@ function SignIn() {
     axios
       .post(
         "http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/login",
-        userData
+        userData, { withCredentials: true }
       )
       .then((response) => {
         console.log(response.data);
