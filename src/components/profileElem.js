@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import {
+  Button
+} from "@material-tailwind/react";
+import { LogOut } from "./log-out";
 import "./style.css";
 
 function ProfileElem() {
@@ -89,6 +93,14 @@ function ProfileElem() {
             Save changes
           </button>
         </form>
+          <Button
+                variant="gradient"
+                size="sm"
+                className="hidden lg:inline-block outline outline-1"
+                onClick={LogOut()}
+              >
+                <span>Log out</span>
+              </Button>
       </div>
     </div>
   );
