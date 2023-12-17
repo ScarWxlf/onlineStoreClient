@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function SignIn() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -24,11 +26,12 @@ function SignIn() {
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/login or /api/login
     axios
       .post(
-        "/api/login",
+        "http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/login",
         userData
       )
       .then((response) => {
         console.log(response.data);
+        navigate("/");
       });
   };
 

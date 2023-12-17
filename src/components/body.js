@@ -4,10 +4,10 @@ import Item from "./item";
 import dataInitial from "../db/data";
 import Filter, { updateCheckeds } from "./filter";
 import coolImage from "../images/c41a0b93-4561-4fe2-93ee-62493bc9807a.jpg";
-//import { Auth } from "./isauth";
+import { Auth } from "./isauth";
 
 function Body() {
-  //console.log(Auth());
+  Auth();
   if (!localStorage.getItem("products")) {
     localStorage.setItem("products", JSON.stringify(dataInitial));
   }
