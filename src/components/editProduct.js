@@ -1,15 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 function EditProduct() {
   const navigate = useNavigate();
   let { id } = useParams();
-  const data = JSON.parse(localStorage.getItem("products"));
-  const [shortDesc, setShortDesc] = useState(data[id - 1].shortDesc);
-  const [longDesc, setLongDesc] = useState(data[id - 1].longDesc);
-  const [price, setPrice] = useState(data[id - 1].price);
-  const [title, setTitle] = useState(data[id - 1].title);
-  const [img, setImage] = useState(data[id - 1].img);
+  // const data = JSON.parse(localStorage.getItem("products"));
+  const [shortDesc, setShortDesc] = useState("");
+  const [longDesc, setLongDesc] = useState("");
+  const [price, setPrice] = useState(0);
+  const [title, setTitle] = useState("");
+  const [img, setImage] = useState(null);
+  const [data, setData] = useState([]);
+  const [star, setStar] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [author, setAuthor] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [params, setParams] = useState({
+    color: [],
+    size: [],
+    availability: "",
+  });
+
+  useEffect(() => {
+    async function axiosTest() {
+      const response = await axios.get(`http://localhost:3004/products/${id}`);
+      setImage(response.data.img);
+      setTitle(response.data.title);
+      setPrice(response.data.price);
+      setShortDesc(response.data.shortDesc);
+      setLongDesc(response.data.longDesc);
+      setAvailability(response.data.params.availability);
+      setParams(response.data.params);
+      setStar(response.data.star);
+      setReviews(response.data.reviews);
+      setAuthor(response.data.author);
+      setData(response.data);
+    }
+    axiosTest();
+  },[id]);
 
   const allColors = [
     "Red",
@@ -34,7 +63,7 @@ function EditProduct() {
 
   useEffect(() => {
     let inputs = document.getElementsByClassName("color");
-    if (typeof data[id - 1].params.color === "string") {
+    if (typeof params.color === "string") {
       for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].value === data[id - 1].params.color) {
           inputs[i].checked = true;
@@ -42,8 +71,8 @@ function EditProduct() {
       }
     } else {
       for (let i = 0; i < inputs.length; i++) {
-        for (let j = 0; j < data[id - 1].params.color.length; j++) {
-          if (inputs[i].value === data[id - 1].params.color[j]) {
+        for (let j = 0; j < params.color.length; j++) {
+          if (inputs[i].value === params.color[j]) {
             inputs[i].checked = true;
           }
         }
@@ -52,8 +81,8 @@ function EditProduct() {
 
     let sizeInputs = document.getElementsByClassName("size");
     for (let i = 0; i < sizeInputs.length; i++) {
-      for (let j = 0; j < data[id - 1].params.size.length; j++) {
-        if (sizeInputs[i].value === data[id - 1].params.size[j]) {
+      for (let j = 0; j < params.size.length; j++) {
+        if (sizeInputs[i].value === params.size[j]) {
           sizeInputs[i].checked = true;
         }
       }
@@ -63,19 +92,19 @@ function EditProduct() {
     if(document.getElementById("propertys").children.length > 0) {
         return;
     }
-    for (let k in data[id - 1].params) {
+    for (let k in params) {
       if (k === "color" || k === "size" || k === "availability") continue;
       let property = document
         .getElementById("property_template")
         .children[0].cloneNode(true);
       let propertys = document.getElementById("propertys");
-      property.children[0].value = `${k}=${data[id - 1].params[k]}`;
+      property.children[0].value = `${k}=${params[k]}`;
       property.children[1].addEventListener("click", deleteItem);
       propertys.appendChild(property);
     }
-  }, [data, id]);
+  }, [data, id, params]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let colors = [];
     let chekeds = document.getElementsByClassName("color");
@@ -93,21 +122,21 @@ function EditProduct() {
     }
 
     const merchData = {
-      id: data[id - 1].id,
+      id: id,
       title: e.target[1].value,
-      img: data[id - 1].img, //URL.createObjectURL(e.target[0].files[0]) ||
-      star: data[id - 1].star,
-      price: parseFloat(e.target[3].value),
+      img: img, //URL.createObjectURL(e.target[0].files[0]) ||
+      star: star,
+      price: parseFloat(e.target[4].value),
       params: {
         color: colors,
         //firm: data[id - 1].params.firm,
-        availability: e.target[4].value,
+        availability: e.target[5].value,
         size: sizes,
       },
-      shortDesc: e.target[2].value,
-      longDesc: e.target[24].value,
-      reviews: data[id - 1].reviews,
-      author: data[id - 1].author,
+      shortDesc: e.target[3].value,
+      longDesc: e.target[25].value,
+      reviews: reviews,
+      author: author,
     };
     const propertys = document.getElementsByClassName("property");
     for (let i = 0; i < propertys.length; i++) {
@@ -118,17 +147,15 @@ function EditProduct() {
     }
     //console.log(merchData);
     if (e.target[0].files[0] === undefined) {
-      data[id - 1] = merchData;
-      localStorage.setItem("products", JSON.stringify(data));
+      await axios.patch(`http://localhost:3004/products/${id}`, merchData);
       navigate("/");
       return;
     }
     const image = new FileReader();
     image.readAsDataURL(e.target[0].files[0]);
-    image.addEventListener("load", () => {
+    image.addEventListener("load",async () => {
       merchData.img = image.result;
-      data[id - 1] = merchData;
-      localStorage.setItem("products", JSON.stringify(data));
+      await axios.patch(`http://localhost:3004/products/${id}`, merchData);
       navigate("/");
     });
   };
@@ -137,6 +164,12 @@ function EditProduct() {
     e.preventDefault();
     e.currentTarget.parentElement.remove();
   };
+
+  const deleteProduct = async (e) => {
+    e.preventDefault();
+    await axios.delete(`http://localhost:3004/products/${id}`);
+    navigate("/");
+  }
 
   const addProperty = (e) => {
     e.preventDefault();
@@ -173,7 +206,9 @@ function EditProduct() {
               </div>
             </div>
             <div className="md:flex-1 px-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+              <div className="flex">
+
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 flex gap-1">
                 Title:{" "}
                 <input
                   className="rounded-lg text-black"
@@ -183,10 +218,21 @@ function EditProduct() {
                   }}
                 />
               </h2>
+              <div className="w-1/5 flex justify-end items-center">
+                  
+                    <button 
+                    onClick={deleteProduct}
+                    className="bg-red-600 rounded-full px-4 h-6"
+                    >
+                      Delete
+                    </button>
+                </div>
+                </div>
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Short product description (max 120 symbols):
               </span>
               <div className="text-gray-600 dark:text-gray-300 text-sm mb-4 w-96">
+                
                 <textarea
                   maxlength="120"
                   className="rounded-lg text-black h-20 px-1 w-full"
@@ -220,11 +266,11 @@ function EditProduct() {
                     {" "}
                     <select className="rounded-lg text-black">
                       <option
-                        value={data[id - 1].params.availability}
+                        value={availability}
                         selected
                         hidden
                       >
-                        {data[id - 1].params.availability}
+                        {availability}
                       </option>
                       <option value="In Stock">In Stock</option>
                       <option value="Out of Stock">Out of Stock</option>

@@ -1,18 +1,78 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Rating, Typography } from "@material-tailwind/react";
 //import data from "../db/data";
 import Item from "./item";
+import axios from "axios";
 
 function DetailsPage() {
-  const data = JSON.parse(localStorage.getItem("products"));
+  const [user, setUser] = useState("");
+  const [img, setImg] = useState(null);
+  const [title, setTitle] = useState("");
+  const [shortDesc, setShortDesc] = useState("");
+  const [longDesc, setLongDesc] = useState("");
+  const [price, setPrice] = useState(0);
+  const [params, setParams] = useState({
+    size: [],
+    color: [],
+    availability: "",
+  });
+  const [reviews, setReviews] = useState([]);
+  const [author, setAuthor] = useState("");
+  const [rated, setRated] = useState(null);
+  const [color, setColor] = useState(params.color);
 
-  const user = JSON.parse(localStorage.getItem("profile")).username;
   let { id } = useParams();
-  const [rated] = React.useState(data[id - 1].star);
+  const [similar, setSimilar] = useState([]);
+  const userID = localStorage.getItem("userID");
+  useEffect(() => {
+    async function axiosTest() {
+      const response = await axios.get(`http://localhost:3004/products/${id}`);
+      setAuthor(response.data.author);
+      setImg(response.data.img);
+      setTitle(response.data.title);
+      setShortDesc(response.data.shortDesc);
+      setLongDesc(response.data.longDesc);
+      setPrice(response.data.price);
+      setParams(response.data.params);
+      setReviews(response.data.reviews);
+      setRated(response.data.star);
+      setColor(response.data.params.color);
+
+      const userResp = await axios.get(`http://localhost:3004/users/${userID}`);
+      setUser(userResp.data.username);
+
+      let allParams = [];
+      for (let k in response.data.params) {
+        if (k === "color" || k === "availability" || k==="size") continue;
+        allParams.push(response.data.params[k]);
+      }
+      let allResponses = [];
+      for (let i=0; i<allParams.length; i++){
+        const response2 = await axios.get(`http://localhost:3004/products?params.firm=${allParams[i]}`);
+        allResponses.push(response2.data);
+      }
+      // console.log(response2.data[0].params)
+      let similar = [];
+      let ids = new Set();
+      allResponses= allResponses.flat();
+      for(let j=0;j<allResponses.length;j++){
+        if(allResponses[j].id !== parseInt(id)){
+          ids.add(allResponses[j].id);
+        }
+      }
+      ids.forEach((id) => {
+        similar.push(<Item id={id}/>);
+      }); 
+      setSimilar(similar);
+    }
+
+    axiosTest();
+  }, [id, userID]);
+
   const [reviewRating, setReviewRating] = React.useState(0);
-  const [color] = React.useState(data[id - 1].params.color);
   const currentDate = new Date();
+
   let colorButtons = [];
   const allColors = {
     red: "bg-red-500",
@@ -103,51 +163,43 @@ function DetailsPage() {
       }, 700);
     }, 2000);
 
-    let items = JSON.parse(localStorage.getItem("cart"));
+    // let items = JSON.parse(localStorage.getItem("cart"));
     const data = {
       id: id,
       size: size.value,
       color: color.value,
     };
-    if (items === null) {
-      localStorage.setItem("cart", JSON.stringify([data]));
-    } else {
-      if (items === "") {
-        localStorage.setItem("cart", JSON.stringify([data]));
-      } else {
-        items.push(data);
-        localStorage.setItem("cart", JSON.stringify(items));
+    const userID = localStorage.getItem("userID");
+    async function checkCart() {
+      const response = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      if(response.data.length > 0){
+        axios.patch(`http://localhost:3004/cart/${response.data[0].id}`, {products: [...response.data[0].products, data]});
+        //console.log(response.data[0].products);
+      }
+      else{
+        axios.post("http://localhost:3004/cart", {userID: userID, id: Math.floor(Math.random()*100000) , products: [data]});
       }
     }
+    checkCart();
+    // if (items === null) {
+    //   localStorage.setItem("cart", JSON.stringify([data]));
+    // } else {
+    //   if (items === "") {
+    //     localStorage.setItem("cart", JSON.stringify([data]));
+    //   } else {
+    //     items.push(data);
+    //     localStorage.setItem("cart", JSON.stringify(items));
+    //   }
+    // }
   };
 
-  function getSimilar() {
-    let similar = [];
-    let ids = new Set();
-    for (let i = 0; i < data.length; i++) {
-      for (let k in data[i].params) {
-        if (k === "color" || k === "availability") continue;
-        if (
-          data[i].params[k] === data[id - 1].params[k] &&
-          data[i].id !== parseInt(id)
-        ) {
-          ids.add(data[i].id);
-        }
-      }
-    }
-    ids.forEach((id) => {
-      similar.push(<Item id={id} />);
-    });
-    return similar;
-  }
-  let similar = getSimilar();
 
   useEffect(() => {
     const image = document.getElementById("image");
     const result = document.getElementById("result");
     const lens = document.getElementById("lens");
 
-    result.style.backgroundImage = `url(${image.src})`;
+    result.style.backgroundImage = `url(${img})`;
     let cx = result.offsetWidth / lens.offsetWidth;
     let cy = result.offsetHeight / lens.offsetHeight;
     //240 180 1.875
@@ -195,26 +247,33 @@ function DetailsPage() {
 
       return { x: x, y: y };
     }
-  }, []);
+  }, [img]);
 
   const submitReview = () => {
     const comment = document.querySelector(".text-review");
     const name = document.querySelector(".user-name-review");
     const date = document.querySelector(".date-review");
     const newreview = {
-      id: data[id - 1].reviews.length + 1,
+      id: Math.floor(Math.random() * 100000000),
       rating: reviewRating,
       comment: comment.value,
       name: name.textContent,
       date: date.textContent,
     };
-    data[id - 1].reviews.push(newreview);
+    const newReviews = [...reviews, newreview];
     let star = 0;
-    data[id - 1].reviews.forEach((review) => {
+    newReviews.forEach((review) => {
       star += review.rating;
     });
-    data[id - 1].star = star / data[id - 1].reviews.length;
-    localStorage.setItem("products", JSON.stringify(data));
+    star/=newReviews.length;
+    axios.patch(`http://localhost:3004/products/${id}`, {star: star, reviews: newReviews});
+    // data[id - 1].reviews.push(newreview);
+    // let star = 0;
+    // data[id - 1].reviews.forEach((review) => {
+    //   star += review.rating;
+    // });
+    // data[id - 1].star = star / data[id - 1].reviews.length;
+    // localStorage.setItem("products", JSON.stringify(data));
     window.location.reload();
   };
 
@@ -222,7 +281,7 @@ function DetailsPage() {
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col w-full md:flex-row -mx-4">
-          <div className="w-1/2 px-4 relative">
+          <div className="w-1/2 px-2 relative">
             <div className="relative h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4 w-full">
               <div
                 id="lens"
@@ -234,7 +293,7 @@ function DetailsPage() {
               <img
                 id="image"
                 className="w-full h-full rounded-lg"
-                src={data[id - 1].img}
+                src={img}
                 alt="Product"
                 onMouseEnter={divVis}
               />
@@ -272,7 +331,7 @@ function DetailsPage() {
                   </svg>
                 </div>
                 <div>
-                  <p class="font-bold">Succes</p>
+                  <p class="font-bold">Success</p>
                 </div>
               </div>
             </div>
@@ -289,12 +348,12 @@ function DetailsPage() {
               </div>
             </div>
           </div>
-          <div className="w-1/2 px-4">
+          <div className="w-1/2 px-2">
             <div className="flex">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                {data[id - 1].title}
+                {title}
               </h2>
-              {user === data[id - 1].author ? (
+              {user === author ? (
                 <div className="w-3/5 flex justify-end items-center">
                   <a href={`/${id}/details/edit`}>
                     <button className="bg-orange-500 rounded-full px-4 h-6">
@@ -307,7 +366,7 @@ function DetailsPage() {
               )}
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 break-words">
-              {data[id - 1].shortDesc}
+              {shortDesc}
             </p>
             <div className="flex mb-4">
               <div className="mr-4">
@@ -316,7 +375,7 @@ function DetailsPage() {
                 </span>
                 <span className="text-gray-600 dark:text-gray-300">
                   {" "}
-                  {data[id - 1].price}
+                  {price}
                 </span>
               </div>
               <div>
@@ -325,10 +384,11 @@ function DetailsPage() {
                 </span>
                 <span className="text-gray-600 dark:text-gray-300">
                   {" "}
-                  {data[id - 1].params.availability}
+                  {params.availability}
                 </span>
               </div>
             </div>
+            {rated ? (
             <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
               {rated}
               <Rating
@@ -340,9 +400,10 @@ function DetailsPage() {
                 color="blue-gray"
                 className="font-medium text-gray-400"
               >
-                Based on {data[id - 1].reviews.length} Reviews
+                Based on {reviews.length} Reviews
               </Typography>
-            </div>
+            </div>) : ""
+            }
             <div className="mb-4">
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Select Color:
@@ -354,7 +415,7 @@ function DetailsPage() {
                 Select Size:
               </span>
               <div className="flex items-center mt-2">
-                {Array.from(data[id - 1].params.size).map((size) => {
+                {Array.from(params.size).map((size) => {
                   return (
                     <label className="input-wrapper dark:bg-gray-600 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-500">
                       {size}
@@ -375,17 +436,17 @@ function DetailsPage() {
                 Product Description:
               </span>
               <p className="text-gray-600 dark:text-gray-300 text-sm mt-2 break-words">
-                {data[id - 1].longDesc}
+                {longDesc}
               </p>
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-3 mt-14">
+        <div className="flex flex-col gap-3 mt-4">
           <h1 className="text-3xl text-white">Reviews</h1>
-          {data[id - 1].reviews.length > 0 ? (
-            Array.from(data[id - 1].reviews).map((review) => {
+          {reviews.length > 0 ? (
+            Array.from(reviews).map((review) => {
               return (
-                <div className="flex flex-col gap-4 bg-gray-700 p-4 rounded-lg text-white">
+                <div className="flex flex-col gap-3 bg-gray-700 p-4 rounded-lg text-white">
                   <div className="flex justify justify-between">
                     <div className="flex gap-2">
                       <div className="w-7 h-7 text-center rounded-full bg-green-700">
@@ -393,7 +454,7 @@ function DetailsPage() {
                       </div>
                       <span>{review.name}</span>
                     </div>
-                    <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                    <div className="flex flex-row items-center gap-2 font-bold text-gray-400">
                       <Rating
                         className="flex text-yellow-400"
                         value={review.rating}
@@ -406,9 +467,9 @@ function DetailsPage() {
 
                   <div className="flex justify-between">
                     <span>{review.date}</span>
-                    <button className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg">
+                    {/* <button className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg">
                       Share
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               );
@@ -419,7 +480,7 @@ function DetailsPage() {
             </div>
           )}
           <div className="flex flex-col">
-            <h1 className="text-3xl mb-2 text-white">Leave a review</h1>
+            <h1 className="text-3xl mb-2 text-white mt-4">Leave a review</h1>
             <div className="flex flex-col bg-gray-700 p-4 rounded-lg text-white">
               <div className="flex justify justify-between">
                 <div className="flex gap-2">
@@ -447,7 +508,7 @@ function DetailsPage() {
               </div>
 
               <div className="flex justify-between">
-                <span className="date-review">{`${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}`}</span>
+                <span className="date-review">{`${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`}</span>
                 <button
                   className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg"
                   onClick={submitReview}
@@ -459,29 +520,15 @@ function DetailsPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center mt-5 mx-7">
+      <div className="flex justify-center w-full">
+      <div className="flex flex-col items-center mt-5 mx-7 w-9/12">
         <h1 className="text-3xl mb-2 text-white">Similar products</h1>
         <div
           className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 ${similar.length === 0 ? "" : "bg-gray-600"} flex-grow ${
             similar.length >= 6 ? "w-full" : "px-2"
           } rounded-lg`}
         >
-          {similar.length >= 6 ? (
-            <div
-              className="relative bg-gray-900 text-white w-full text-4xl flex items-center justify-center pr-2"
-              style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
-            >
-              {"scrcll"}
-              <div
-                className="absolute ml-7 mt-12"
-                style={{ paddingTop: "3px" }}
-              >
-                {">"}
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
+
           {similar.length === 0 ? (
             <div className="flex justify-center w-64 h-14 items-center">
               <p className="text-white text-2xl">No similar products yet</p>
@@ -491,24 +538,9 @@ function DetailsPage() {
               return <div className="flex flex-none">{item}</div>;
             })
           )}
-          {similar.length >= 6 ? (
-            <div
-              className="relative bg-gray-900 text-white w-full pr-1 text-4xl flex items-center justify-center pl-2"
-              style={{ writingMode: "vertical-lr", textOrientation: "upright" }}
-            >
-              {"scr ll"}
-              <div
-                className="absolute mr-7 mt-12"
-                style={{ paddingTop: "3px" }}
-              >
-                {"<"}
-              </div>
-              <div className="absolute mt-16 pb-2 rotate-180">{"c"}</div>
-            </div>
-          ) : (
-            ""
-          )}
+          
         </div>
+      </div>
       </div>
     </div>
   );

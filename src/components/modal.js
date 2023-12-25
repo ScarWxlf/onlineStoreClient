@@ -1,9 +1,12 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function MyModal({ open, setOpen, total }) {
   const cancelButtonRef = useRef(null);
   const [paypalorcard, setPaypalorcard] = useState(false);
+  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -63,11 +66,28 @@ export default function MyModal({ open, setOpen, total }) {
     console.log(addressData);
     console.log(cardData);
     console.log(deliveryData);
+    const userID  = localStorage.getItem("userID");
+    async function setOrder() {
+      const cartResponse = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      const orderData = {
+        id: Math.floor(Math.random() * 100000000),
+        userID: userID,
+        addressData: addressData,
+        products: cartResponse.data[0].products,
+        status: "pending",
+        date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`,
+        total: total
+      }
+      await axios.post(`http://localhost:3004/orders`, orderData); 
+      axios.patch(`http://localhost:3004/cart/${cartResponse.data[0].id}`, {products: []});
+      navigate("/order-history");
+    }
+    setOrder();
   
-    const orderDate = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`;
-    const user = JSON.parse(localStorage.getItem("profile"));
-    localStorage.setItem("order", JSON.stringify({user:user.username, deliveryData:deliveryData, totalprice:total, date:orderDate}));
-    console.log(total);
+    // const orderDate = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`;
+    // const user = JSON.parse(localStorage.getItem("profile"));
+    // localStorage.setItem("order", JSON.stringify({user:user.username, deliveryData:deliveryData, totalprice:total, date:orderDate}));
+    // console.log(total);
   };
 
   return (

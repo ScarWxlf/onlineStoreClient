@@ -11,6 +11,7 @@ import { Outlet } from "react-router-dom";
 
 export default function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
+  const userID = localStorage.getItem("userID");
   // const [auth, setAuth] = useState(false);
 
   React.useEffect(() => {
@@ -87,22 +88,16 @@ export default function NavbarDefault() {
           >
             ClothStore
           </Typography>
-          <div className="hidden lg:block">{navList}</div>
+          {userID ?(<div className="hidden lg:block">{navList}</div>) :
+          (
+            <>
+
           <div className="flex items-center gap-x-1">
           {/* {auth ? (
             <Button>
               <span>Profile</span>
             </Button>
           ):( */}
-            <>
-          <Button
-                variant="gradient"
-                size="sm"
-                className="hidden lg:inline-block"
-                //onClick={LogOut()}
-              >
-                <span>Log out</span>
-              </Button>
             <a href="/sign-up">
               <Button
                 variant="gradient"
@@ -121,9 +116,9 @@ export default function NavbarDefault() {
                 <span>Sign in</span>
               </Button>
             </a>
-            </>
-          {/* )} */}
           </div>
+            </>
+          )}
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"

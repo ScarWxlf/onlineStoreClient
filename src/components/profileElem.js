@@ -1,29 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  Button
+} from "@material-tailwind/react";
+import {useNavigate} from "react-router-dom";
 import "./style.css";
+import axios from "axios";
 
 function ProfileElem() {
-  const profile = JSON.parse(localStorage.getItem("profile"));
-  const [img, setImg] = useState(profile.img);
-  const [username, setUsername] = useState(profile.username);
-  const [email, setEmail] = useState(profile.email);
-  const [number, setNumber] = useState(profile.number);
+  const navigate = useNavigate();
+  //const profile = JSON.parse(localStorage.getItem("profile"));
+  const userID = JSON.parse(localStorage.getItem("userID"));
+  const [img, setImg] = useState(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+
+  useEffect(() => {
+    async function axiosTest() {
+      const response = await axios.get(`http://localhost:3004/users/${userID}`);
+      setImg(response.data.img);
+      setUsername(response.data.username);
+      setEmail(response.data.email);
+      setNumber(response.data.phonenumber);
+    }
+
+    axiosTest();
+  }, [userID]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
-      img: img,
+      img: img || null,
       username: username,
       email: email,
-      number: number,
+      phonenumber: number,
     };
-    localStorage.setItem("profile", JSON.stringify(userData));
-    if(!(e.target[3].files[0] === undefined)){
+    if(e.target[3].files[0] === undefined){
+      axios
+      .patch(
+        `http://localhost:3004/users/${userID}`, userData
+      )
+      .then((response) => {
+        console.log(response.data);
+        
+      });
+    }
+    else{
     const image = new FileReader();
     image.readAsDataURL(e.target[3].files[0]);
     image.addEventListener("load",() => {
       userData.img = image.result;
-      localStorage.setItem("profile", JSON.stringify(userData));
+      axios
+      .patch(
+        `http://localhost:3004/users/${userID}`, userData
+      )
+      .then((response) => {
+        console.log(response.data);
+        
+      });
     })}
+  }
+
+  const LogOut = () => {
+    localStorage.removeItem("userID");
+    navigate("/");
+    window.location.reload();
   }
 
   return (
@@ -32,13 +73,15 @@ function ProfileElem() {
         Something
       </div> */}
       <div className="container flex flex-wrap flex-col text-gray-200 gap-3 items-center mt-8  mx-2">
+        {!img ? (<div className="h-32 w-32 bg-gray-500 rounded-full flex justify-center items-center">Your image</div>) : (
         <img
           src={img}
           class="w-32 h-32 rounded-full shadow-lg object-cover"
           alt="Avatar"
-        />
+        />)
+        }
         <a href="order-history">
-        <button className="h-8 w-32 bg-blue-800 rounded-full hover:bg-blue-700">Order history</button>
+        <button className="h-8 w-32 bg-blue-800 rounded-lg hover:bg-blue-700">Order history</button>
         </a>
         <h1 className="mb-1 text-3xl">Profile info</h1>
         <form className="flex flex-col items-center gap-4" onSubmit={handleSubmit}>
@@ -89,6 +132,14 @@ function ProfileElem() {
             Save changes
           </button>
         </form>
+        <Button
+                variant="gradient"
+                size="sm"
+                className=" bg-red-700 lg:inline-block"
+                onClick={LogOut}
+              >
+                <span>Log out</span>
+              </Button>
       </div>
     </div>
   );

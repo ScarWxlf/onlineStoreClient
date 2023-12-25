@@ -1,15 +1,32 @@
-import React, { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // import data from "../db/data";
 //import { Rating, Typography } from "@material-tailwind/react";
 
 const MerchEditor = () => {
-  const data = JSON.parse(localStorage.getItem("products"));
-  
+  //const [data, setData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    async function axiosTest() {
+      // const response = await axios.get("http://localhost:3004/products");
+      // setData(response.data);
+      const userID = JSON.parse(localStorage.getItem("userID"));
+      if(!userID){
+        navigate("/sign-up");
+        return;
+      }
+      const response = await axios.get(`http://localhost:3004/users/${userID}`);
+      setUserName(response.data.username);
+    }
+
+    axiosTest();
+  }, [navigate]);
+
   const [img, setImage] = useState(
     "https://yt3.googleusercontent.com/ytc/APkrFKb_WQOhfq4ZQeTGiHzX7ROY3202bwR23zfE7-Bxnw=s900-c-k-c0x00ffffff-no-rj"
-    );
-    const navigate = useNavigate();
+  );
   const allColors = [
     "Red",
     "Yellow",
@@ -47,10 +64,8 @@ const MerchEditor = () => {
       }
     }
 
-    const userName = JSON.parse(localStorage.getItem("profile")).username;
-
     const merchData = {
-      id: data.length + 1,
+      id: Math.floor(Math.random() * 1000000000),
       title: e.target[1].value,
       img: "", //`https://picsum.photos/id/${data.length+1}/1200/1200`,//URL.createObjectURL(e.target[0].files[0])
       star: 0,
@@ -67,28 +82,33 @@ const MerchEditor = () => {
     };
     const propertys = document.getElementById("propertys").children;
     for (let i = 0; i < propertys.length; i++) {
-      const property = propertys[i].value.split('=');
+      const property = propertys[i].value.split("=");
       merchData.params[property[0]] = property[1];
     }
     const image = new FileReader();
     image.readAsDataURL(e.target[0].files[0]);
-    image.addEventListener("load",() => {
+    image.addEventListener("load", () => {
       merchData.img = image.result;
       const newData = Array.from(JSON.parse(localStorage.getItem("products")));
       newData.push(merchData);
-      localStorage.setItem("products", JSON.stringify(newData));
-      navigate("/");
-    })
+      try {
+        axios.post("http://localhost:3004/products", merchData);
+      } catch (e) {
+        console.log(e.message);
+      }
+      //navigate("/");
+    });
   };
 
   const addProperty = (e) => {
     e.preventDefault();
-    const property = document.getElementById("property_template").children[0].cloneNode(true);
+    const property = document
+      .getElementById("property_template")
+      .children[0].cloneNode(true);
     const propertys = document.getElementById("propertys");
     propertys.appendChild(property);
-    
   };
-  
+
   return (
     <div className="bg-gray-100 dark:bg-gray-800 py-4 flex flex-col flex-grow">
       <form onSubmit={handleSubmit}>
@@ -123,7 +143,10 @@ const MerchEditor = () => {
                 Short product description (120 symb max):
               </span>
               <div className="text-gray-600 dark:text-gray-300 text-sm mb-4 w-96">
-                <textarea maxlength="120" className="rounded-lg text-black h-20 px-1 w-full" />
+                <textarea
+                  maxlength="120"
+                  className="rounded-lg text-black h-20 px-1 w-full"
+                />
               </div>
               <div className="flex mb-4">
                 <div className="mr-4">
@@ -230,7 +253,10 @@ const MerchEditor = () => {
                   Long product description (370 symb max):
                 </span>
                 <div className="text-gray-600 dark:text-gray-300 w-full text-sm mt-2">
-                  <textarea maxlength="370" className="rounded-lg text-black w-full" />
+                  <textarea
+                    maxlength="370"
+                    className="rounded-lg text-black w-full"
+                  />
                 </div>
               </div>
             </div>
@@ -261,7 +287,7 @@ const MerchEditor = () => {
           </button>
         </div>
       </form>
-      <template id='property_template'>
+      <template id="property_template">
         <input
           className="text-center property w-32 me-1 accent-current rounded-full px-1"
           type="text"

@@ -23,18 +23,19 @@ function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
+      id: Math.floor(Math.random() * 100000000),
       username: data.username,
       password: data.password,
     };
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register or /api/register
     axios
       .post(
-        "http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register",
+        "http://localhost:3004/users",
         userData,
       )
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        navigate("/sign-in");
       });
   };
 
@@ -42,7 +43,7 @@ function SignUp() {
     <div className="flex flex-grow items-center justify-center ">
       <div className="container items-center flex flex-col mb-32">
         <form
-          className="flex flex-col justify-center items-center gap-8 p-8 border-black border-2 rounded-md border-opacity-20"
+          className="flex flex-col justify-center items-center gap-8 py-4 px-8 border-black border-2 rounded-md border-opacity-20"
           onSubmit={handleSubmit}
         >
           <h1>Register</h1>
@@ -78,12 +79,15 @@ function SignUp() {
               Password
             </label>
           </div>
+          <div className="flex flex-col gap-2">
           <button
             className="border border-gray-500 rounded-lg px-5 py-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
             type="submit"
           >
             Register
           </button>
+        <a href="/sign-in" className="pt-1 text-sm text-blue-700">Alredy register?</a>
+        </div>
         </form>
       </div>
     </div>

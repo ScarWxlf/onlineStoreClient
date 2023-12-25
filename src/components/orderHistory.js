@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function OrderHistory() {
-  function orderHistory() {
-    const orders = JSON.parse(localStorage.getItem("order"));
-    console.log(orders);
-    const history = [];
-    if (orders.user === JSON.parse(localStorage.getItem("profile")).username) {
-      for (let i = 0; i < 5; i++) {
-        history.push(
-          <div className="flex items-center justify-around h-20 w-full bg-blue-200 rounded-xl mx-1 my-1">
-            <p>items count: {Math.floor(Math.random()*5)+orders.deliveryData.length}</p>
-            <p>${Math.floor(Math.random()*5)+orders.totalprice}</p>
-            <p>date: {orders.date}</p>
-          </div>
-        );
+  const [orders, setOrders] = useState([]);
+  
+  useEffect(() => {
+    async function orderHistory() {
+      const userID = localStorage.getItem("userID");
+      async function getOrders(){
+        const response = await axios.get(`http://localhost:3004/orders?userID=${userID}`);
+        return response.data;
       }
+      const orders = await getOrders();
+      const history = [];
+      if (orders.length > 0) {
+        for (let i = 0; i < orders.length; i++) {
+          let allimg = [];
+          for(let j =0; j < orders[i].products.length && j<3; j++){
+            const img = await axios.get(`http://localhost:3004/products/${orders[i].products[j].id}`);
+            allimg.push(
+              <img
+              src={img.data.img}
+              alt="Product"
+              className="h-16 w-16 object-cover rounded-lg"
+            />
+              );
+          }
+          history.push(
+            <div className="flex items-center justify-around h-20 w-full bg-blue-200 rounded-xl mx-1 my-1">
+              <div className="flex items-center justify-start w-52 gap-1">
+                {allimg}
+              </div>
+              <p>${orders[i].total}</p>
+              <p>date: {orders[i].date}</p>
+              <p>status: {orders[i].status}</p>
+            </div>
+          );
+        }
+      }
+      setOrders(history);
     }
-    return history;
-  }
-
-  const history = orderHistory();
+    orderHistory();
+  }, []);
 
   return (
     <div className="flex flex-col flex-grow bg-gray-800">
@@ -28,7 +50,7 @@ function OrderHistory() {
           <div className="flex items-end">
             <h1 className="text-3xl text-gray-200 mt-2">Order history</h1>
           </div>
-          <div className="flex flex-wrap w-full px-2 mt-2">{history}</div>
+          <div className="flex flex-wrap w-full px-2 mt-2">{orders.length === 0 ? (<div className="flex text-white justify-center w-full h-full items-center">History is empty now</div>) : (orders)}</div>
         </div>
       </div>
     </div>

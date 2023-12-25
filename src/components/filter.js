@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 //import data from "../db/data";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
@@ -18,7 +18,16 @@ export function updateCheckeds() {
 } 
 
 function Filter() {
-  const data = JSON.parse(localStorage.getItem("products"))
+  const [data, setData] = React.useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("http://localhost:3004/products");
+      const data = await response.json();
+      setData(data);
+    }
+    fetchData();
+  }, []);
 
   function allFilters() {
     const categories = {};
@@ -65,6 +74,7 @@ function Filter() {
 
     e.currentTarget.classList.toggle("rounded-full");
     e.currentTarget.classList.toggle("rounded-t-2xl");
+    e.currentTarget.classList.toggle("border-b-0");
   };
 
   return (
@@ -75,7 +85,7 @@ function Filter() {
               <div className="bg-gray-950 rounded-sm w-full flex flex-col items-center">
                 <div className="flex justify-center w-full pt-2">
                   <button
-                    className="flex relative items-center justify-start gap-1 w-11/12 bg-sky-950 rounded-t-2xl hover:bg-sky-800"
+                    className="flex relative items-center justify-start gap-1 w-11/12 bg-sky-950 border border-white/50 border-b-0 rounded-t-2xl hover:bg-sky-800"
                     id={ids++}
                     onClick={Show}
                   >
@@ -87,8 +97,8 @@ function Filter() {
                     >{category}</h1>
                   </button>
                 </div>
-                <div className="bg-sky-950 rounded-b-3xl w-11/12">
-                <div className="ps-4 flex flex-wrap gap-2 rounded-lg p-2">
+                <div className="bg-sky-950 rounded-b-3xl  border border-white/50 border-t-0 w-11/12">
+                <div className="ps-4 flex flex-wrap gap-2 rounded-lg  p-2">
                   {Array.from(categories[category]).map((value) => {
                     return (
                       <label className="flex items-center input-wrapper px-2 rounded-full hover:bg-sky-800">
@@ -100,7 +110,7 @@ function Filter() {
                         />
                         {value}
                         {category === "color" ? (
-                            <div className={`ms-1 w-2 h-2 ${allColors[value.toLowerCase()]} rounded-full`}></div>
+                            <div className={`ms-1 mt-0.5 w-2 h-2 ${allColors[value.toLowerCase()]} rounded-full`}></div>
                           ):("")
                         }
                       </label>

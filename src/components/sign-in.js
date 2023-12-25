@@ -25,13 +25,20 @@ function SignIn() {
     };
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/login or /api/login
     axios
-      .post(
-        "http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/login",
-        userData, { withCredentials: true }
+      .get(
+        `http://localhost:3004/users?username=${userData.username}&password=${userData.password}`
       )
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        if(response.data.length > 0){
+          localStorage.setItem("userID", JSON.stringify(response.data[0].id));
+          navigate("/");
+          window.location.reload();
+        }
+        else{
+          alert("Wrong username or password");
+        }
+        
       });
   };
 
@@ -39,7 +46,7 @@ function SignIn() {
     <div className="flex flex-grow items-center justify-center">
       <div className="container items-center flex flex-col mb-32">
         <form
-          className="flex flex-col justify-center items-center gap-8 p-8 border-black border-2 rounded-md border-opacity-20"
+          className="flex flex-col justify-center items-center gap-8 py-4 px-8 border-black border-2 rounded-md border-opacity-20"
           onSubmit={handleSubmit}
         >
           <h1>Login</h1>
@@ -75,12 +82,17 @@ function SignIn() {
               Password
             </label>
           </div>
+          <div className="flex flex-col gap-2">
           <button
             className="border px-5 border-gray-500 rounded-lg py-1 duration-300 hover:bg-gray-900 hover:text-white hover:outline-2"
             type="submit"
           >
             Login
           </button>
+          <a href="/sign-up" className="pt-1 text-sm text-blue-700">
+            Not registered yet?
+          </a>
+          </div>
         </form>
       </div>
     </div>
