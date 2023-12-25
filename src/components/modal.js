@@ -68,8 +68,7 @@ export default function MyModal({ open, setOpen, total }) {
     console.log(deliveryData);
     const userID  = localStorage.getItem("userID");
     async function setOrder() {
-      let cartResponse = await axios.get(`/fakeapi/cart?userID=${userID}`);
-      cartResponse.data[0] = JSON.parse(cartResponse.data[0])
+      const cartResponse = await axios.get(`/fakeapi/cart?userID=${userID}`);
       const orderData = {
         id: Math.floor(Math.random() * 100000000),
         userID: userID,

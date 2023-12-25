@@ -24,8 +24,7 @@ function EditProduct() {
 
   useEffect(() => {
     async function axiosTest() {
-      let response = await axios.get(`/fakeapi/products/${id}`);
-      response.data = JSON.parse(response.data);
+      const response = await axios.get(`/fakeapi/products/${id}`);
       setImage(response.data.img);
       setTitle(response.data.title);
       setPrice(response.data.price);

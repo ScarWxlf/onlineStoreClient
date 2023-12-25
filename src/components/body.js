@@ -17,8 +17,8 @@ function Body() {
   const [data, setData] = useState([]);
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get("/fakeapi/products");
-      setData(JSON.parse(response.data));
+      const response = await axios.get("fakeapi/products");
+      setData(response.data);
       setLoading(false);
     }
 

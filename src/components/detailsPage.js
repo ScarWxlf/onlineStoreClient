@@ -27,8 +27,7 @@ function DetailsPage() {
   const userID = localStorage.getItem("userID");
   useEffect(() => {
     async function axiosTest() {
-      let response = await axios.get(`/fakeapi/products/${id}`);
-      response.data = JSON.parse(response.data);
+      const response = await axios.get(`/fakeapi/products/${id}`);
       setAuthor(response.data.author);
       setImg(response.data.img);
       setTitle(response.data.title);
@@ -41,7 +40,7 @@ function DetailsPage() {
       setColor(response.data.params.color);
 
       const userResp = await axios.get(`/fakeapi/users/${userID}`);
-      setUser(JSON.parse(userResp.data.username));
+      setUser(userResp.data.username);
 
       let allParams = [];
       for (let k in response.data.params) {
@@ -50,8 +49,7 @@ function DetailsPage() {
       }
       let allResponses = [];
       for (let i=0; i<allParams.length; i++){
-        let response2 = await axios.get(`/fakeapi/products?params.firm=${allParams[i]}`);
-        response2.data = JSON.parse(response2.data);
+        const response2 = await axios.get(`/fakeapi/products?params.firm=${allParams[i]}`);
         allResponses.push(response2.data);
       }
       // console.log(response2.data[0].params)
@@ -173,8 +171,7 @@ function DetailsPage() {
     };
     const userID = localStorage.getItem("userID");
     async function checkCart() {
-      let response = await axios.get(`/fakeapi/cart?userID=${userID}`);
-      response.data=JSON.parse(response.data);
+      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
       if(response.data.length > 0){
         axios.patch(`/fakeapi/cart/${response.data[0].id}`, {products: [...response.data[0].products, data]});
         //console.log(response.data[0].products);

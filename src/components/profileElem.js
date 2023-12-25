@@ -17,8 +17,7 @@ function ProfileElem() {
 
   useEffect(() => {
     async function axiosTest() {
-      let response = await axios.get(`/fakeapi/users/${userID}`);
-      response.data = JSON.parse(response.data);
+      const response = await axios.get(`/fakeapi/users/${userID}`);
       setImg(response.data.img);
       setUsername(response.data.username);
       setEmail(response.data.email);

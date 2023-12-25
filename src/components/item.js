@@ -18,10 +18,10 @@ function Item({ id}) {
   useEffect(() => {
     async function axiosTest() {
       const response = await axios.get(`/fakeapi/products/${id}`);
-      setImg(JSON.parse(response.data.img));
-      setTitle(JSON.parse(response.data.title));
-      setPrice(JSON.parse(response.data.price));
-      setShortDesc(JSON.parse(response.data.shortDesc));
+      setImg(response.data.img);
+      setTitle(response.data.title);
+      setPrice(response.data.price);
+      setShortDesc(response.data.shortDesc);
     }
     axiosTest();
   }, [id]);

@@ -18,7 +18,7 @@ const MerchEditor = () => {
         return;
       }
       const response = await axios.get(`/fakeapi/users/${userID}`);
-      setUserName(JSON.parse(response.data.username));
+      setUserName(response.data.username);
     }
 
     axiosTest();
