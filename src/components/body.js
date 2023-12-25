@@ -121,7 +121,7 @@ function Body() {
     }
     setItems(allItems);
     console.log(allItems)
-  }, [checked, search, fromProducts, toProducts, data, items]);
+  }, [checked, search, fromProducts, toProducts]);
 
   return (
     <div className="bg-gray-950 text-white flex-grow">
