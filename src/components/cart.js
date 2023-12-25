@@ -9,7 +9,7 @@ function Cart() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get("http://localhost:3004/products");
+      const response = await axios.get("/fakeapi/products");
       setData(response.data);
       setLoading(false);
     }
@@ -41,7 +41,7 @@ function Cart() {
   const userID = localStorage.getItem("userID");
   useEffect(() => {
     async function getCart(){
-      const response = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
       //console.log(response.data);
       if(response.data.length === 0)return;
       setAllItems(response.data[0].products);
@@ -67,9 +67,9 @@ function Cart() {
   checkCart();
 
   async function redefinitionPrice(id) {
-      const response = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
       if(response.data.length > 0){
-        axios.patch(`http://localhost:3004/cart/${response.data[0].id}`, {products: [...response.data[0].products.filter(el => el.id !== id)]});
+        axios.patch(`/fakeapi/cart/${response.data[0].id}`, {products: [...response.data[0].products.filter(el => el.id !== id)]});
         console.log(response.data[0].products);
       }
 

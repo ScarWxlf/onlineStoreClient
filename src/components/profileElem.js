@@ -17,7 +17,7 @@ function ProfileElem() {
 
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get(`http://localhost:3004/users/${userID}`);
+      const response = await axios.get(`/fakeapi/users/${userID}`);
       setImg(response.data.img);
       setUsername(response.data.username);
       setEmail(response.data.email);
@@ -38,7 +38,7 @@ function ProfileElem() {
     if(e.target[3].files[0] === undefined){
       axios
       .patch(
-        `http://localhost:3004/users/${userID}`, userData
+        `/fakeapi/users/${userID}`, userData
       )
       .then((response) => {
         console.log(response.data);
@@ -52,7 +52,7 @@ function ProfileElem() {
       userData.img = image.result;
       axios
       .patch(
-        `http://localhost:3004/users/${userID}`, userData
+        `/fakeapi/users/${userID}`, userData
       )
       .then((response) => {
         console.log(response.data);

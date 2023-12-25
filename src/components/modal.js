@@ -68,7 +68,7 @@ export default function MyModal({ open, setOpen, total }) {
     console.log(deliveryData);
     const userID  = localStorage.getItem("userID");
     async function setOrder() {
-      const cartResponse = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      const cartResponse = await axios.get(`/fakeapi/cart?userID=${userID}`);
       const orderData = {
         id: Math.floor(Math.random() * 100000000),
         userID: userID,
@@ -78,8 +78,8 @@ export default function MyModal({ open, setOpen, total }) {
         date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`,
         total: total
       }
-      await axios.post(`http://localhost:3004/orders`, orderData); 
-      axios.patch(`http://localhost:3004/cart/${cartResponse.data[0].id}`, {products: []});
+      await axios.post(`/fakeapi/orders`, orderData); 
+      axios.patch(`/fakeapi/cart/${cartResponse.data[0].id}`, {products: []});
       navigate("/order-history");
     }
     setOrder();

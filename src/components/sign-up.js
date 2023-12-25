@@ -30,7 +30,7 @@ function SignUp() {
     //http://ec2-13-53-121-204.eu-north-1.compute.amazonaws.com/api/register or /api/register
     axios
       .post(
-        "http://localhost:3004/users",
+        "/fakeapi/users",
         userData,
       )
       .then((response) => {

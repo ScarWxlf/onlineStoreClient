@@ -8,7 +8,7 @@ function OrderHistory() {
     async function orderHistory() {
       const userID = localStorage.getItem("userID");
       async function getOrders(){
-        const response = await axios.get(`http://localhost:3004/orders?userID=${userID}`);
+        const response = await axios.get(`/fakeapi/orders?userID=${userID}`);
         return response.data;
       }
       const orders = await getOrders();
@@ -17,7 +17,7 @@ function OrderHistory() {
         for (let i = 0; i < orders.length; i++) {
           let allimg = [];
           for(let j =0; j < orders[i].products.length && j<3; j++){
-            const img = await axios.get(`http://localhost:3004/products/${orders[i].products[j].id}`);
+            const img = await axios.get(`/fakeapi/products/${orders[i].products[j].id}`);
             allimg.push(
               <img
               src={img.data.img}

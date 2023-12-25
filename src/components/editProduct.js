@@ -24,7 +24,7 @@ function EditProduct() {
 
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get(`http://localhost:3004/products/${id}`);
+      const response = await axios.get(`/fakeapi/products/${id}`);
       setImage(response.data.img);
       setTitle(response.data.title);
       setPrice(response.data.price);
@@ -147,7 +147,7 @@ function EditProduct() {
     }
     //console.log(merchData);
     if (e.target[0].files[0] === undefined) {
-      await axios.patch(`http://localhost:3004/products/${id}`, merchData);
+      await axios.patch(`/fakeapi/products/${id}`, merchData);
       navigate("/");
       return;
     }
@@ -155,7 +155,7 @@ function EditProduct() {
     image.readAsDataURL(e.target[0].files[0]);
     image.addEventListener("load",async () => {
       merchData.img = image.result;
-      await axios.patch(`http://localhost:3004/products/${id}`, merchData);
+      await axios.patch(`/fakeapi/products/${id}`, merchData);
       navigate("/");
     });
   };
@@ -167,7 +167,7 @@ function EditProduct() {
 
   const deleteProduct = async (e) => {
     e.preventDefault();
-    await axios.delete(`http://localhost:3004/products/${id}`);
+    await axios.delete(`/fakeapi/products/${id}`);
     navigate("/");
   }
 

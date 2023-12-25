@@ -22,7 +22,7 @@ function Filter() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("http://localhost:3004/products");
+      const response = await fetch("/fakeapi/products");
       const data = await response.json();
       setData(data);
     }

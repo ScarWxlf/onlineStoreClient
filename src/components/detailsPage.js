@@ -27,7 +27,7 @@ function DetailsPage() {
   const userID = localStorage.getItem("userID");
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get(`http://localhost:3004/products/${id}`);
+      const response = await axios.get(`/fakeapi/products/${id}`);
       setAuthor(response.data.author);
       setImg(response.data.img);
       setTitle(response.data.title);
@@ -39,7 +39,7 @@ function DetailsPage() {
       setRated(response.data.star);
       setColor(response.data.params.color);
 
-      const userResp = await axios.get(`http://localhost:3004/users/${userID}`);
+      const userResp = await axios.get(`/fakeapi/users/${userID}`);
       setUser(userResp.data.username);
 
       let allParams = [];
@@ -49,7 +49,7 @@ function DetailsPage() {
       }
       let allResponses = [];
       for (let i=0; i<allParams.length; i++){
-        const response2 = await axios.get(`http://localhost:3004/products?params.firm=${allParams[i]}`);
+        const response2 = await axios.get(`/fakeapi/products?params.firm=${allParams[i]}`);
         allResponses.push(response2.data);
       }
       // console.log(response2.data[0].params)
@@ -171,13 +171,13 @@ function DetailsPage() {
     };
     const userID = localStorage.getItem("userID");
     async function checkCart() {
-      const response = await axios.get(`http://localhost:3004/cart?userID=${userID}`);
+      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
       if(response.data.length > 0){
-        axios.patch(`http://localhost:3004/cart/${response.data[0].id}`, {products: [...response.data[0].products, data]});
+        axios.patch(`/fakeapi/cart/${response.data[0].id}`, {products: [...response.data[0].products, data]});
         //console.log(response.data[0].products);
       }
       else{
-        axios.post("http://localhost:3004/cart", {userID: userID, id: Math.floor(Math.random()*100000) , products: [data]});
+        axios.post("/fakeapi/cart", {userID: userID, id: Math.floor(Math.random()*100000) , products: [data]});
       }
     }
     checkCart();
@@ -266,7 +266,7 @@ function DetailsPage() {
       star += review.rating;
     });
     star/=newReviews.length;
-    axios.patch(`http://localhost:3004/products/${id}`, {star: star, reviews: newReviews});
+    axios.patch(`/fakeapi/products/${id}`, {star: star, reviews: newReviews});
     // data[id - 1].reviews.push(newreview);
     // let star = 0;
     // data[id - 1].reviews.forEach((review) => {

@@ -17,7 +17,7 @@ function Item({ id}) {
   const [shortDesc, setShortDesc] = useState("");
   useEffect(() => {
     async function axiosTest() {
-      const response = await axios.get(`http://localhost:3004/products/${id}`);
+      const response = await axios.get(`/fakeapi/products/${id}`);
       setImg(response.data.img);
       setTitle(response.data.title);
       setPrice(response.data.price);

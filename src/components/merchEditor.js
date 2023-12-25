@@ -10,14 +10,14 @@ const MerchEditor = () => {
   const navigate = useNavigate();
   useEffect(() => {
     async function axiosTest() {
-      // const response = await axios.get("http://localhost:3004/products");
+      // const response = await axios.get("/fakeapi/products");
       // setData(response.data);
       const userID = JSON.parse(localStorage.getItem("userID"));
       if(!userID){
         navigate("/sign-up");
         return;
       }
-      const response = await axios.get(`http://localhost:3004/users/${userID}`);
+      const response = await axios.get(`/fakeapi/users/${userID}`);
       setUserName(response.data.username);
     }
 
@@ -92,7 +92,7 @@ const MerchEditor = () => {
       const newData = Array.from(JSON.parse(localStorage.getItem("products")));
       newData.push(merchData);
       try {
-        axios.post("http://localhost:3004/products", merchData);
+        axios.post("/fakeapi/products", merchData);
       } catch (e) {
         console.log(e.message);
       }
