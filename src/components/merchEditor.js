@@ -96,7 +96,7 @@ const MerchEditor = () => {
       } catch (e) {
         console.log(e.message);
       }
-      //navigate("/");
+      navigate("/");
     });
   };
 

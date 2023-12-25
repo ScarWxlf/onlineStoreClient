@@ -44,23 +44,25 @@ function DetailsPage() {
 
       let allResponses = [];
       for (let k in response.data.params) {
-        if (k === "color" || k === "availability" || k==="size") continue;
+        if (k === "color" || k === "availability" || k === "size") continue;
         // allParams.push(response.data.params[k]);
-        const response2 = await axios.get(`/fakeapi/products?params.${k}=${response.data.params[k]}`);
+        const response2 = await axios.get(
+          `/fakeapi/products?params.${k}=${response.data.params[k]}`
+        );
         allResponses.push(response2.data);
       }
       // console.log(response2.data[0].params)
       let similar = [];
       let ids = new Set();
-      allResponses= allResponses.flat();
-      for(let j=0;j<allResponses.length;j++){
-        if(allResponses[j].id !== parseInt(id)){
+      allResponses = allResponses.flat();
+      for (let j = 0; j < allResponses.length; j++) {
+        if (allResponses[j].id !== parseInt(id)) {
           ids.add(allResponses[j].id);
         }
       }
       ids.forEach((id) => {
-        similar.push(<Item id={id}/>);
-      }); 
+        similar.push(<Item id={id} />);
+      });
       setSimilar(similar);
     }
 
@@ -168,13 +170,20 @@ function DetailsPage() {
     };
     const userID = localStorage.getItem("userID");
     async function checkCart() {
-      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
-      if(response.data.length > 0){
-        axios.patch(`/fakeapi/cart/${response.data[0].id}`, {products: [...response.data[0].products, data]});
+      const response = await axios.get(
+        `/fakeapi/cart?userID=${userID}`
+      );
+      if (response.data.length > 0) {
+        axios.patch(`/fakeapi/cart/${response.data[0].id}`, {
+          products: [...response.data[0].products, data],
+        });
         //console.log(response.data[0].products);
-      }
-      else{
-        axios.post("/fakeapi/cart", {userID: userID, id: Math.floor(Math.random()*100000) , products: [data]});
+      } else {
+        axios.post("/fakeapi/cart", {
+          userID: userID,
+          id: Math.floor(Math.random() * 100000),
+          products: [data],
+        });
       }
     }
     checkCart();
@@ -189,7 +198,6 @@ function DetailsPage() {
     //   }
     // }
   };
-
 
   useEffect(() => {
     const image = document.getElementById("image");
@@ -262,8 +270,11 @@ function DetailsPage() {
     newReviews.forEach((review) => {
       star += review.rating;
     });
-    star/=newReviews.length;
-    axios.patch(`/fakeapi/products/${id}`, {star: star, reviews: newReviews});
+    star /= newReviews.length;
+    axios.patch(`/fakeapi/products/${id}`, {
+      star: star,
+      reviews: newReviews,
+    });
     // data[id - 1].reviews.push(newreview);
     // let star = 0;
     // data[id - 1].reviews.forEach((review) => {
@@ -386,21 +397,23 @@ function DetailsPage() {
               </div>
             </div>
             {rated ? (
-            <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
-              {rated}
-              <Rating
-                className="flex text-yellow-400"
-                value={parseInt(rated)}
-                readonly
-              />
-              <Typography
-                color="blue-gray"
-                className="font-medium text-gray-400"
-              >
-                Based on {reviews.length} Reviews
-              </Typography>
-            </div>) : ""
-            }
+              <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                {rated}
+                <Rating
+                  className="flex text-yellow-400"
+                  value={parseInt(rated)}
+                  readonly
+                />
+                <Typography
+                  color="blue-gray"
+                  className="font-medium text-gray-400"
+                >
+                  Based on {reviews.length} Reviews
+                </Typography>
+              </div>
+            ) : (
+              ""
+            )}
             <div className="mb-4">
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Select Color:
@@ -517,27 +530,19 @@ function DetailsPage() {
           </div>
         </div>
       </div>
-      <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center mt-5 mx-7 w-9/12">
-        <h1 className="text-3xl mb-2 text-white">Similar products</h1>
-        <div
-          className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 ${similar.length === 0 ? "" : "bg-gray-600"} flex-grow ${
-            similar.length >= 6 ? "w-full" : "px-2"
-          } rounded-lg`}
-        >
-
-          {similar.length === 0 ? (
-            <div className="flex justify-center w-64 h-14 items-center">
-              <p className="text-white text-2xl">No similar products yet</p>
-            </div>
-          ) : (
-            similar.map((item) => {
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center mt-5 mx-7 w-9/12">
+          <h1 className="text-3xl mb-2 text-white">Similar products</h1>
+          <div
+            className={`inline-flex overflow-x-scroll snap-mandatory scroll-smooth no-scrollbar gap-2 px-1 bg-gray-600 flex-grow ${
+              similar.length >= 4 ? "w-11/12" : "px-2"
+            } rounded-lg`}
+          >
+            {similar.map((item) => {
               return <div className="flex flex-none">{item}</div>;
-            })
-          )}
-          
-        </div>
-      </div>
+            })}
+          </div>
+        </div> 
       </div>
     </div>
   );
