@@ -42,14 +42,11 @@ function DetailsPage() {
       const userResp = await axios.get(`/fakeapi/users/${userID}`);
       setUser(userResp.data.username);
 
-      let allParams = [];
+      let allResponses = [];
       for (let k in response.data.params) {
         if (k === "color" || k === "availability" || k==="size") continue;
-        allParams.push(response.data.params[k]);
-      }
-      let allResponses = [];
-      for (let i=0; i<allParams.length; i++){
-        const response2 = await axios.get(`/fakeapi/products?params.firm=${allParams[i]}`);
+        // allParams.push(response.data.params[k]);
+        const response2 = await axios.get(`/fakeapi/products?params.${k}=${response.data.params[k]}`);
         allResponses.push(response2.data);
       }
       // console.log(response2.data[0].params)
