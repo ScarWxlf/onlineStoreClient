@@ -24,7 +24,7 @@ function Filter() {
     async function fetchData() {
       const response = await fetch("/fakeapi/products");
       const data = await response.json();
-      setData(data);
+      setData(JSON.parse(data));
     }
     fetchData();
   }, []);

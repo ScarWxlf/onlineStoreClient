@@ -30,6 +30,7 @@ function SignIn() {
       )
       .then((response) => {
         console.log(response.data);
+        response.data = JSON.parse(response.data);
         if(response.data.length > 0){
           localStorage.setItem("userID", JSON.stringify(response.data[0].id));
           navigate("/");
