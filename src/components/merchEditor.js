@@ -12,7 +12,7 @@ const MerchEditor = () => {
     async function axiosTest() {
       // const response = await axios.get("/fakeapi/products");
       // setData(response.data);
-      const userID = JSON.parse(localStorage.getItem("userID"));
+      const userID = localStorage.getItem("userID");
       if(!userID){
         navigate("/sign-up");
         return;
@@ -89,8 +89,8 @@ const MerchEditor = () => {
     image.readAsDataURL(e.target[0].files[0]);
     image.addEventListener("load", () => {
       merchData.img = image.result;
-      const newData = Array.from(JSON.parse(localStorage.getItem("products")));
-      newData.push(merchData);
+      // const newData = Array.from(JSON.parse(localStorage.getItem("products")));
+      // newData.push(merchData);
       try {
         axios.post("/fakeapi/products", merchData);
       } catch (e) {
