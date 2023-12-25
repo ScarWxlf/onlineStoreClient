@@ -120,6 +120,7 @@ function Body() {
       }
     }
     setItems(allItems);
+    console.log(allItems)
   }, [checked, search, fromProducts, toProducts, data, items]);
 
   return (
