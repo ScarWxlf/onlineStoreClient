@@ -14,7 +14,7 @@ const MerchEditor = () => {
       // setData(response.data);
       const userID = localStorage.getItem("userID");
       if(!userID){
-        navigate("/sign-up");
+        navigate("/sign-in");
         return;
       }
       const response = await axios.get(`/fakeapi/users/${userID}`);
@@ -84,6 +84,10 @@ const MerchEditor = () => {
     for (let i = 0; i < propertys.length; i++) {
       const property = propertys[i].value.split("=");
       merchData.params[property[0]] = property[1];
+    }
+    if(merchData.params.color.length === 0 || merchData.params.size.length === 0 || merchData.price === '' || e.target[0].files[0] === undefined || merchData.shortDesc ==="" || merchData.longDesc ===""|| merchData.titlev==="" ){
+      alert("Please fill all fields");
+      return;
     }
     const image = new FileReader();
     image.readAsDataURL(e.target[0].files[0]);

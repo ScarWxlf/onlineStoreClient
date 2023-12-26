@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Rating, Typography } from "@material-tailwind/react";
-//import data from "../db/data";
+import { Rating, Typography, Button } from "@material-tailwind/react";
 import Item from "./item";
 import axios from "axios";
 
 function DetailsPage() {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
   const [img, setImg] = useState(null);
   const [title, setTitle] = useState("");
   const [shortDesc, setShortDesc] = useState("");
@@ -39,19 +38,21 @@ function DetailsPage() {
       setRated(response.data.star);
       setColor(response.data.params.color);
 
-      const userResp = await axios.get(`/fakeapi/users/${userID}`);
-      setUser(userResp.data.username);
+      if (userID) {
+        const userResp = await axios.get(
+          `/fakeapi/users/${userID}`
+        );
+        setUser(userResp.data.username);
+      }
 
       let allResponses = [];
       for (let k in response.data.params) {
         if (k === "color" || k === "availability" || k === "size") continue;
-        // allParams.push(response.data.params[k]);
         const response2 = await axios.get(
           `/fakeapi/products?params.${k}=${response.data.params[k]}`
         );
         allResponses.push(response2.data);
       }
-      // console.log(response2.data[0].params)
       let similar = [];
       let ids = new Set();
       allResponses = allResponses.flat();
@@ -162,7 +163,6 @@ function DetailsPage() {
       }, 700);
     }, 2000);
 
-    // let items = JSON.parse(localStorage.getItem("cart"));
     const data = {
       id: id,
       size: size.value,
@@ -177,7 +177,6 @@ function DetailsPage() {
         axios.patch(`/fakeapi/cart/${response.data[0].id}`, {
           products: [...response.data[0].products, data],
         });
-        //console.log(response.data[0].products);
       } else {
         axios.post("/fakeapi/cart", {
           userID: userID,
@@ -187,16 +186,6 @@ function DetailsPage() {
       }
     }
     checkCart();
-    // if (items === null) {
-    //   localStorage.setItem("cart", JSON.stringify([data]));
-    // } else {
-    //   if (items === "") {
-    //     localStorage.setItem("cart", JSON.stringify([data]));
-    //   } else {
-    //     items.push(data);
-    //     localStorage.setItem("cart", JSON.stringify(items));
-    //   }
-    // }
   };
 
   useEffect(() => {
@@ -275,13 +264,6 @@ function DetailsPage() {
       star: star,
       reviews: newReviews,
     });
-    // data[id - 1].reviews.push(newreview);
-    // let star = 0;
-    // data[id - 1].reviews.forEach((review) => {
-    //   star += review.rating;
-    // });
-    // data[id - 1].star = star / data[id - 1].reviews.length;
-    // localStorage.setItem("products", JSON.stringify(data));
     window.location.reload();
   };
 
@@ -316,8 +298,15 @@ function DetailsPage() {
             <div className="flex -mx-2 mb-4 justify-center">
               <div className="w-1/2 px-2">
                 <button
-                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-500 dark:hover:bg-gray-500"
+                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold disabled:opacity-70 disabled:bg-gray-700 disabled:hover:bg-gray-700 hover:bg-gray-500 dark:hover:bg-gray-500"
                   onClick={addToCart}
+                  disabled={
+                    params.availability === "Out of Stock"
+                      ? true
+                      : !user
+                      ? true
+                      : false
+                  }
                 >
                   Add to Cart
                 </button>
@@ -492,40 +481,57 @@ function DetailsPage() {
           <div className="flex flex-col">
             <h1 className="text-3xl mb-2 text-white mt-4">Leave a review</h1>
             <div className="flex flex-col bg-gray-700 p-4 rounded-lg text-white">
-              <div className="flex justify justify-between">
-                <div className="flex gap-2">
-                  <div className="w-7 h-7 text-center rounded-full bg-green-700">
-                    {user[0]}
+              {user ? (
+                <>
+                  <div className="flex justify justify-between">
+                    <div className="flex gap-2">
+                      <div className="w-7 h-7 text-center rounded-full bg-green-700">
+                        {user ? user[0] : ""}
+                      </div>
+                      <span className="user-name-review">{user}</span>
+                    </div>
+                    <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
+                      <Rating
+                        className="flex text-yellow-400 star-review"
+                        value={reviewRating}
+                        onChange={(value) => {
+                          setReviewRating(value);
+                        }}
+                      />
+                    </div>
                   </div>
-                  <span className="user-name-review">{user}</span>
-                </div>
-                <div className="flex flex-row items-center gap-2 font-bold text-gray-400 mb-5">
-                  <Rating
-                    className="flex text-yellow-400 star-review"
-                    value={reviewRating}
-                    onChange={(value) => {
-                      setReviewRating(value);
-                    }}
-                  />
-                </div>
-              </div>
 
-              <div className="h-24 mb-5">
-                <textarea
-                  className="text-review resize-none text-black px-1 rounded-xl bg-gray-300 h-full w-full"
-                  maxLength={400}
-                ></textarea>
-              </div>
+                  <div className="h-24 mb-5">
+                    <textarea
+                      className="text-review resize-none text-black px-1 rounded-xl bg-gray-300 h-full w-full"
+                      maxLength={400}
+                    ></textarea>
+                  </div>
 
-              <div className="flex justify-between">
-                <span className="date-review">{`${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`}</span>
-                <button
-                  className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg"
-                  onClick={submitReview}
-                >
-                  Submit
-                </button>
-              </div>
+                  <div className="flex justify-between">
+                    <span className="date-review">{`${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`}</span>
+                    <button
+                      className="p-1 px-2 bg-gray-600 hover:bg-gray-500 border border-gray-950 bg-opacity-60 rounded-lg"
+                      onClick={submitReview}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-1">
+                  <h1>Log in to leave a review</h1>
+                  <a href="/sign-in">
+                    <Button
+                      variant="gradient"
+                      size="sm"
+                      className="bg-green-700 lg:inline-block"
+                    >
+                      <span>Log in</span>
+                    </Button>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -538,11 +544,17 @@ function DetailsPage() {
               similar.length >= 4 ? "w-11/12" : "px-2"
             } rounded-lg`}
           >
-            {similar.map((item) => {
-              return <div className="flex flex-none">{item}</div>;
-            })}
+            {similar.length === 0 ? (
+              <div className="flex justify-center w-64 h-10 opacity-70 items-center">
+                <p className="text-white text-2xl">No similar products yet</p>
+              </div>
+            ) : (
+              similar.map((item) => {
+                return <div className="flex flex-none">{item}</div>;
+              })
+            )}
           </div>
-        </div> 
+        </div>
       </div>
     </div>
   );

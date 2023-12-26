@@ -17,6 +17,10 @@ function ProfileElem() {
 
   useEffect(() => {
     async function axiosTest() {
+      if(userID === null){
+        navigate("/sign-in");
+        return;
+      }
       const response = await axios.get(`/fakeapi/users/${userID}`);
       setImg(response.data.img);
       setUsername(response.data.username);
@@ -25,7 +29,7 @@ function ProfileElem() {
     }
 
     axiosTest();
-  }, [userID]);
+  }, [userID, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,6 +63,8 @@ function ProfileElem() {
         
       });
     })}
+    alert("Changes saved");
+    window.location.reload();
   }
 
   const LogOut = () => {

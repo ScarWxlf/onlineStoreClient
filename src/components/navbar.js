@@ -159,16 +159,9 @@ export default function NavbarDefault() {
         </div>
         <MobileNav open={openNav}>
           <div className="container mx-auto">
-            {navList}
+            {userID ?(
+            navList):(
             <div className="flex items-center gap-x-1">
-            <Button
-                variant="text"
-                size="sm"
-                className=""
-                //onClick={LogOut()}
-              >
-                <span>Log out</span>
-              </Button>
               <a href="/sign-up">
                 <Button fullWidth variant="text" size="sm" className="">
                   <span>Sign up</span>
@@ -179,7 +172,8 @@ export default function NavbarDefault() {
                   <span>Sign in</span>
                 </Button>
               </a>
-            </div>
+            </div>)
+            }
           </div>
         </MobileNav>
       </Navbar>

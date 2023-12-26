@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MyModal from "./modal";
 import axios from "axios";
 //import data from "../db/data";
 
 function Cart() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,6 @@ function Cart() {
 
     axiosTest();
   }, []);
-  //console.log(data)
 
   const allColors = {
     red: "text-red-500",
@@ -35,19 +36,22 @@ function Cart() {
     brown: "text-orange-900",
   };
 
-  let Shipping = 0, Total = 0;
+  let Shipping = 0,
+    Total = 0;
   let subtotal = 0;
   const [allItems, setAllItems] = useState([]);
   const userID = localStorage.getItem("userID");
   useEffect(() => {
-    async function getCart(){
+    async function getCart() {
+      if (userID === null) {
+        navigate("/sign-in");
+        return;
+      }
       const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
-      //console.log(response.data);
-      if(response.data.length === 0)return;
       setAllItems(response.data[0].products);
     }
     getCart();
-  },[userID]);
+  }, [userID, navigate]);
   function checkCart() {
     if (allItems === null || allItems === undefined || allItems.length === 0) {
       return;
@@ -67,25 +71,19 @@ function Cart() {
   checkCart();
 
   async function redefinitionPrice(id) {
-      const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
-      if(response.data.length > 0){
-        axios.patch(`/fakeapi/cart/${response.data[0].id}`, {products: [...response.data[0].products.filter(el => el.id !== id)]});
-        console.log(response.data[0].products);
-      }
-
-    // change.forEach((el, index) => {
-    //   if (JSON.stringify(el) === JSON.stringify(item)) {
-    //     change.splice(index, 1);
-    //   }
-    // });
-    // localStorage.setItem("cart", JSON.stringify(change));
+    const response = await axios.get(`/fakeapi/cart?userID=${userID}`);
+    if (response.data.length > 0) {
+      axios.patch(`/fakeapi/cart/${response.data[0].id}`, {
+        products: [...response.data[0].products.filter((el) => el.id !== id)],
+      });
+      console.log(response.data[0].products);
+    }
     window.location.reload();
   }
 
   const deleteItem = (e) => {
     let el = e.currentTarget.parentElement;
     let id = el.id;
-    // e.currentTarget.parentElement.remove();
     redefinitionPrice(id);
   };
 
@@ -105,13 +103,11 @@ function Cart() {
   });
   return (
     <div class="flex flex-grow bg-gray-50 font-poppins dark:text-white dark:bg-gray-700 ">
-      <MyModal
-                    open={isModalOpen}
-                    setOpen={setIsModalOpen}
-                    total={Total}
-                  />
+      <MyModal open={isModalOpen} setOpen={setIsModalOpen} total={Total} />
       {loading ? (
-        <div className="w-full h-full flex justify-center items-center">Loading...</div>
+        <div className="w-full h-full flex justify-center items-center">
+          Loading...
+        </div>
       ) : (
         <div class="justify-center flex-1 px-1 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
           <h2 class="mb-10 text-4xl font-bold text-center ">Your Cart</h2>
